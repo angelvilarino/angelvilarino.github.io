@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ángel Vilariño García | Data Scientist &amp; Data Engineer</title>
+  <meta name="description" content="Portfolio de Ángel Vilariño García: graduado en Ciencia e Ingeniería de Datos. Data science, data engineering, machine learning e IA generativa.">
+  <meta name="author" content="Ángel Vilariño García">
+  <meta name="theme-color" content="#3b4fd8">
+  <link rel="canonical" href="https://angelvilarino.github.io/">
+
+  <!-- Vista previa al compartir el enlace (LinkedIn, WhatsApp, X...) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ángel Vilariño García">
+  <meta property="og:title" content="Ángel Vilariño García | Data Scientist &amp; Data Engineer">
+  <meta property="og:description" content="Graduado en Ciencia e Ingeniería de Datos. Data engineering, machine learning e IA generativa.">
+  <meta property="og:url" content="https://angelvilarino.github.io/">
+  <meta property="og:image" content="https://angelvilarino.github.io/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Ángel Vilariño García, Data Scientist y Data Engineer">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ángel Vilariño García | Data Scientist &amp; Data Engineer">
+  <meta name="twitter:description" content="Graduado en Ciencia e Ingeniería de Datos. Data engineering, machine learning e IA generativa.">
+  <meta name="twitter:image" content="https://angelvilarino.github.io/assets/og-image.png">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f4fd8'/%3E%3Ctext x='32' y='42' font-family='sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='white'%3EAV%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Tema (sin parpadeo) y marca de que hay JavaScript (para las animaciones de entrada)
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.classList.add('js');
+    })();
+  </script>
+</head>
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="site-header" id="site-header">
+    <div class="wrap"><div class="bar">
+      <a class="brand" href="#/" id="brand"><span class="mono">AV</span><span class="brand-name">Ángel Vilariño García</span></a>
+      <nav class="nav" id="nav" aria-label="Principal"></nav>
+      <div class="tools">
+        <button class="tool" id="lang-btn" type="button"></button>
+        <button class="tool" id="theme-btn" type="button"></button>
+      </div>
+    </div></div>
+  </header>
+
+  <main class="wrap" id="app"></main>
+
+  <footer class="site-footer">
+    <div class="wrap" id="footer"></div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" hidden>
+    <button class="lb-close" id="lb-close" type="button" aria-label="Cerrar">×</button>
+    <img id="lb-img" alt="">
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="content.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
