@@ -1,23 +1,38 @@
-# Web personal de Ángel Vilariño García
+# Ángel Vilariño García | Portfolio Personal
 
-Sitio estático (HTML + CSS + JS), sin dependencias ni proceso de compilación.
+¡Hola! Soy **Ángel Vilariño García**, Científico e Ingeniero de Datos graduado por la Universidade da Coruña (UDC) y con base en Galicia. 
 
-## Estructura
-- `index.html`: estructura base y metadatos (título, vista previa al compartir).
-- `style.css`: estilos, modo claro/oscuro y animaciones.
-- `script.js`: lógica de la web (rutas, idioma, tema, interacciones).
-- `content.js`: **todo el contenido** (textos ES/EN, proyectos, certificaciones, habilidades, enlaces).
-- `404.html`: página de error personalizada (GitHub Pages la usa automáticamente).
-- `assets/`: foto, CV (ES/EN), logos (`assets/logos/`), certificados, imagen de vista previa.
+Este repositorio contiene el código de mi [página web personal](https://angelvilarino.github.io/), un espacio diseñado a medida para presentar mi trayectoria, mis conocimientos y, sobre todo, los proyectos en los que he estado trabajando.
 
-## Publicar en GitHub Pages
-1. Crea en GitHub un repositorio **público** llamado exactamente `angelvilarino.github.io`.
-2. Sube **el contenido** de esta carpeta a la raíz del repositorio (no la carpeta en sí).
-3. En el repositorio: *Settings → Pages → Build and deployment → Source: Deploy from a branch → Branch: `main` / `(root)`* y guarda.
-4. En 1-2 minutos estará en `https://angelvilarino.github.io/`.
+## ¿Qué vas a encontrar en esta web?
 
-Si usas otro nombre de repositorio o dominio, cambia la URL `https://angelvilarino.github.io/` en `index.html`
-(`canonical`, `og:url`, `og:image`, `twitter:image`) y el enlace `href="/"` de `404.html`.
+Mi objetivo con este portfolio es mostrar cómo combino la **ingeniería de datos** (creación de pipelines, almacenes de datos, orquestación) con la **ciencia de datos e IA** (modelado predictivo, machine learning, procesamiento de lenguaje natural y visión artificial).
 
-## Probar en local
-Abre `index.html` en el navegador, o lanza un servidor: `python3 -m http.server` y visita `http://localhost:8000`.
+La web está dividida en varias secciones clave:
+
+*   **Proyectos:** Análisis detallados de mis trabajos más relevantes, incluyendo arquitecturas, decisiones técnicas y métricas de éxito. Algunos de los destacados son:
+    *   **PedalIA:** Un sistema completo en la nube que predice la disponibilidad de bicicletas en BiciCoruña utilizando Machine Learning.
+    *   **Detección temprana del TEA:** Mi Trabajo de Fin de Grado (calificado con un 9), donde apliqué inteligencia artificial sobre cuestionarios clínicos reales.
+*   **Sobre mí:** Un resumen de mi formación académica, mi experiencia profesional (como mi paso por el departamento de AI & Data de Deloitte) y un vistazo a mi vida personal y aficiones.
+*   **Habilidades:** Las tecnologías, lenguajes (Python, SQL, R...) y herramientas (Snowflake, dbt, AWS, Docker...) que utilizo en mi día a día.
+
+## Sobre el diseño de la web
+
+He querido que la web refleje mi forma de trabajar: **limpia, eficiente y prestando atención a los detalles**. 
+*   Cuenta con **modo claro y oscuro** para adaptarse a tus preferencias.
+*   Es **100% bilingüe** (Español e Inglés).
+*   Está diseñada de forma fluida y sin distracciones para que los datos y los proyectos sean los verdaderos protagonistas.
+
+## Contacto
+
+Si quieres hablar sobre datos, inteligencia artificial o explorar posibles colaboraciones, ¡me encantaría conectar contigo!
+
+*   **LinkedIn:** [Ángel Vilariño García](https://linkedin.com/in/%C3%A1ngel-vilari%C3%B1o-garc%C3%ADa-181594156)
+*   **Email:** angelvg333@gmail.com
+*   **CV:** Disponible para descargar directamente desde la web.
+
+---
+*Gracias por pasarte por aquí.* 
+```eof
+
+Este texto funciona mucho mejor como una tarjeta de visita: destaca quién eres, qué proyectos importantes tienes y cuáles son tus habilidades principales, invitando a quien lea el repositorio a visitar tu web o a contactarte. ¿Te encaja mejor este estilo?
