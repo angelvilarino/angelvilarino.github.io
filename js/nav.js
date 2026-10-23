@@ -60,8 +60,6 @@ document.addEventListener('click', e => { const b = e.target.closest('[data-togg
 document.addEventListener('click', e => {
   const m = e.target.closest('[data-more]');
   if (m) { const w = m.closest('.cg'), op = m.getAttribute('aria-expanded') !== 'true'; $$('.xtra', w).forEach(x => x.hidden = !op); m.setAttribute('aria-expanded', String(op)); m.innerHTML = op ? m.dataset.b : m.dataset.a; return; }
-  const p = e.target.closest('[data-pdf]');
-  if (p) { const box = p.nextElementSibling, op = box.hidden; box.hidden = !op; p.closest('.cert').classList.toggle('wide', op); const f = $('iframe', box); if (op && !f.src) f.src = f.dataset.src; p.textContent = op ? p.dataset.b : p.dataset.a; return; }
   const pf = e.target.closest('[data-pf]');
   if (pf) { const r = pf.closest('.body'); $$('[data-pf]', r).forEach(b => b.setAttribute('aria-pressed', b === pf)); $$('[data-pc]', r).forEach(s => s.hidden = pf.dataset.pf !== 'all' && s.dataset.pc !== pf.dataset.pf); }
 });

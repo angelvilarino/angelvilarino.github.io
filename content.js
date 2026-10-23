@@ -60,7 +60,7 @@ const UI = {
     filters: "Filtrar habilidades",
     f_all: "Todas", f_code: "Programación", f_ai: "IA y ciencia de datos", f_data: "Ingeniería de datos", f_viz: "Visualización y BI", f_work: "Herramientas y gestión",
     tile_place: "Desde", tile_where: "A Coruña, Galicia", tile_time: "Hora local",
-    cert_open: "Ver los 12 cursos", cert_close: "Ocultar cursos",
+    cert_open: "Ver los 15 cursos", cert_close: "Ocultar cursos",
     copy_email: "Copiar correo", copied: "¡Correo copiado!", copied_btn: "Copiado",
     back_top: "Volver arriba", foot_by: "Hecho a mano con HTML, CSS y JavaScript.",
     foot_role: "Científico e Ingeniero de Datos en A Coruña.", foot_nav: "Navegación", foot_links: "Enlaces",
@@ -102,7 +102,7 @@ const UI = {
     filters: "Filter skills",
     f_all: "All", f_code: "Programming", f_ai: "AI & data science", f_data: "Data engineering", f_viz: "Visualization & BI", f_work: "Tools & management",
     tile_place: "Based in", tile_where: "A Coruña, Galicia", tile_time: "Local time",
-    cert_open: "See all 12 courses", cert_close: "Hide courses",
+    cert_open: "See all 15 courses", cert_close: "Hide courses",
     copy_email: "Copy email", copied: "Email copied!", copied_btn: "Copied",
     back_top: "Back to top", foot_by: "Handmade with HTML, CSS and JavaScript.",
     foot_role: "Data Scientist & Data Engineer in A Coruña.", foot_nav: "Navigation", foot_links: "Links",
@@ -237,9 +237,18 @@ const CERT_GROUPS = [
     ]
   },
   {
+    title: { es: "Desarrollo y control de versiones", en: "Development & version control" },
+    cols: true,
+    items: [
+      { title: "GitHub Foundations 1", logo: "assets/logos/github.svg" },
+      { title: "GitHub Foundations 2", logo: "assets/logos/github.svg" }
+    ]
+  },
+  {
     title: { es: "Inteligencia artificial con Claude (Anthropic Academy)", en: "AI with Claude (Anthropic Academy)" },
     collapsible: true,
-    summary: { es: "12 cursos completados entre septiembre y octubre de 2026", en: "12 courses completed between September and October 2026" },
+    cols: true,
+    summary: { es: "15 cursos completados entre septiembre y octubre de 2026", en: "15 courses completed between September and October 2026" },
     items: [
       { title: "Building with the Claude API", featured: true,
         meta: { es: "Construcción de aplicaciones sobre la API de Claude.", en: "Building applications on top of the Claude API." } },
@@ -253,7 +262,10 @@ const CERT_GROUPS = [
       { title: { es: "MCP: Temas avanzados", en: "MCP: Advanced Topics" } },
       { title: "Introduction to subagents" },
       { title: "Introduction to agent skills" },
-      { title: { es: "El manual del SDLC nativo de IA", en: "The AI-native SDLC Handbook" } }
+      { title: { es: "El manual del SDLC nativo de IA", en: "The AI-native SDLC Handbook" } },
+      { title: { es: "Implementar Claude Enterprise con confianza", en: "Deploying Claude Enterprise with confidence" } },
+      { title: { es: "Construir equipos humano-agente efectivos (beta)", en: "Building effective human-agent teams (beta)" } },
+      { title: { es: "Capacidades y limitaciones de la IA", en: "AI capabilities and limitations" } }
     ],
     logo: "assets/logos/claude.svg"
   }
@@ -376,16 +388,16 @@ const PERSONAL_INTRO = {
 };
 
 const INTERESTS = [
-  { title: { es: "Deporte", en: "Sport" },
+  { icon: "sport", title: { es: "Deporte", en: "Sport" },
     text: { es: "El deporte siempre ha estado presente en mi vida: he jugado al fútbol, al baloncesto y al fútbol sala, y he practicado atletismo. Hoy sigo yendo al gimnasio con regularidad, porque me aporta constancia, disciplina y energía para el resto del día.",
             en: "Sport has always been part of my life: I've played football, basketball and futsal, and I've done athletics. Today I still go to the gym regularly, because it gives me consistency, discipline and energy for the rest of the day." } },
-  { title: { es: "Música y cine", en: "Music and film" },
+  { icon: "music film", title: { es: "Música y cine", en: "Music and film" },
     text: { es: "Estudié solfeo y toqué la guitarra durante cinco años, y la música sigue acompañándome a diario. También me encanta el cine: una buena película es una forma estupenda de desconectar y de descubrir otras historias y puntos de vista.",
             en: "I studied music theory and played the guitar for five years, and music still keeps me company every day. I also love film: a good movie is a great way to switch off and discover other stories and points of view." } },
-  { title: { es: "Amigos y aprendizaje", en: "Friends and learning" },
+  { icon: "users", title: { es: "Amigos y aprendizaje", en: "Friends and learning" },
     text: { es: "Me gusta quedar con mis amigos, charlar, compartir ideas y aprender de ellos. Creo que muchas de las mejores ideas nacen de una buena conversación, y que se aprende más cuando se aprende en compañía.",
             en: "I like meeting up with my friends, chatting, sharing ideas and learning from them. I believe many of the best ideas come from a good conversation, and that you learn more when you learn together." } },
-  { title: { es: "Viajes", en: "Travel" },
+  { icon: "plane", title: { es: "Viajes", en: "Travel" },
     text: { es: "Me apasiona conocer otros países y culturas. Viajar me abre la mente, me saca de la rutina y me enseña a ver las cosas desde perspectivas muy distintas a la mía.",
             en: "I'm passionate about discovering other countries and cultures. Travelling opens my mind, takes me out of my routine and teaches me to see things from perspectives very different from my own." } }
 ];
@@ -715,3 +727,306 @@ const PROJECTS = [
     ]
   }
 ];
+
+/* =====================================================================
+   VERSIÓN EN GALEGO (traducións engadidas a todo o contido anterior)
+   Se un texto non ten tradución, móstrase en español.
+   ===================================================================== */
+UI.gl = {
+  nav_home: `Inicio`, nav_about: `Sobre min`, nav_projects: `Proxectos`,
+  lang_switch: `Galego`, theme_dark: `Modo escuro`, theme_light: `Modo claro`,
+  role: `Científico e Enxeñeiro de Datos`,
+  hero_desc: `Graduado en Ciencia e Enxeñaría de Datos pola Universidade da Coruña, con coñecementos de enxeñaría de datos, estatística, machine learning, IA xenerativa e visualización.`,
+  cta_projects: `Ver proxectos`, cta_cv: `Ver CV`, cta_contact: `Contacto`,
+  toc: `Nesta páxina`,
+  s_about: `Sobre min`, s_recog: `Recoñecementos`, s_projects: `Proxectos`,
+  s_skills: `Habilidades`, s_contact: `Contacto`,
+  s_experience: `Experiencia`, s_education: `Formación`,
+  more_about: `Coñecer máis sobre min`, more_recog: `Ver toda a miña traxectoria académica`,
+  all_projects: `Ver todos os proxectos`,
+  r_avg: `Nota media do grao`, r_honors: `Matrículas de honra`, r_tfg: `Nota do TFG`,
+  r_abau: `Recoñecemento aos mellores expedientes de Bacharelato (ABAU 2022)`,
+  a_title: `Sobre min`, a_edu: `Formación académica`, a_exp: `Experiencia profesional`,
+  a_excel: `Excelencia académica`, a_cert: `Certificacións`,
+  a_skills: `Habilidades e competencias`, a_personal: `Vida persoal`,
+  a_skills_intro: `A miña formación combina a enxeñaría de datos (modelado, pipelines, almacéns de datos, plataformas cloud) coa ciencia de datos (estatística, aprendizaxe automática, PLN, visión artificial e sistemas de recomendación). A continuación, un resumo por áreas, xunto coas habilidades persoais que me definen.`,
+  soft: `Habilidades persoais`, languages: `Idiomas`,
+  honors_btn: `Ver en que materias as obtiven`, honors_hide: `Ocultar materias`,
+  honors_note: `Matrículas de honra por materia`,
+  cert_view: `Ver certificado`, cert_featured: `Destacada`,
+  avg_label: `Nota media`, honors_label: `Matrículas`, tfg_label: `TFG`,
+  p_title: `Proxectos`,
+  p_intro: `Unha selección de traballos académicos e persoais. Preme nun para ver todos os detalles.`,
+  p_back: `Volver a proxectos`, p_overview: `Resumo`, p_detail: `Descrición detallada`,
+  p_stack: `Tecnoloxías`, p_results: `Resultados`, p_gallery: `Galería`, p_links: `Ligazóns`, p_metrics: `Cifras clave`, p_pipeline: `Pipeline experimental`,
+  p_img: `Imaxe do proxecto`, p_notfound: `Este proxecto non existe.`,
+  l_demo: `Ver demo`, l_memoria: `Memoria`, l_repo: `Repositorio`, l_web: `Web`,
+  c_email: `Correo electrónico`, c_phone: `Teléfono`,
+  c_github: `GitHub`, c_linkedin: `LinkedIn`, c_cv: `Descargar CV`,
+  hero_hint: `Move o cursor sobre os puntos e fai clic`,
+  filters: `Filtrar habilidades`,
+  f_all: `Todas`, f_code: `Programación`, f_ai: `IA e ciencia de datos`, f_data: `Enxeñaría de datos`, f_viz: `Visualización e BI`, f_work: `Ferramentas e xestión`,
+  tile_place: `Desde`, tile_where: `A Coruña, Galicia`, tile_time: `Hora local`,
+  cert_open: `Ver os 15 cursos`, cert_close: `Ocultar cursos`,
+  copy_email: `Copiar correo`, copied: `Correo copiado!`, copied_btn: `Copiado`,
+  back_top: `Volver arriba`, foot_by: `Feito a man con HTML, CSS e JavaScript.`,
+  foot_role: `Científico e Enxeñeiro de Datos na Coruña.`, foot_nav: `Navegación`, foot_links: `Ligazóns`,
+  close: `Pechar`, open_img: `Ampliar foto`,
+  footer: `© 2026 Ángel Vilariño García`
+};
+
+(function () {
+  /* ---- Textos curtos: diccionario español -> galego ---- */
+  const D = {
+    // Habilidades
+    "Lenguajes de programación": "Linguaxes de programación", "Ciencia y análisis de datos": "Ciencia e análise de datos",
+    "IA generativa": "IA xenerativa", "Ingeniería de datos y cloud": "Enxeñaría de datos e cloud",
+    "Visualización, BI y mapas": "Visualización, BI e mapas", "Desarrollo y herramientas": "Desenvolvemento e ferramentas",
+    "Metodologías ágiles y gestión": "Metodoloxías áxiles e xestión",
+    "Estadística avanzada": "Estatística avanzada", "NLP y minería de textos": "PLN e minaría de textos",
+    "Aprendizaje federado": "Aprendizaxe federada", "Series temporales": "Series temporais",
+    "Agentes de IA": "Axentes de IA", "Gestión de backlog y sprints": "Xestión de backlog e sprints",
+    // Formación y experiencia
+    "Máster en Análisis y Visualización de Datos Masivos (Big Data)": "Máster en Análise e Visualización de Datos Masivos (Big Data)",
+    "Universidad de A Coruña": "Universidade da Coruña",
+    "Grado en Ciencia e Ingeniería de Datos": "Grao en Ciencia e Enxeñaría de Datos",
+    "Nota media final de 8,7, 12 matrículas de honor y TFG con un 9.": "Nota media final de 8,7, 12 matrículas de honra e TFG cun 9.",
+    "Bachillerato Científico": "Bacharelato Científico",
+    "Reconocimiento a los mejores expedientes (ABAU 2022).": "Recoñecemento aos mellores expedientes (ABAU 2022).",
+    "Prácticas curriculares en el departamento de AI & Data": "Prácticas curriculares no departamento de AI & Data",
+    // Matrículas de honor
+    "Gestión de Datos en Escenarios Inteligentes": "Xestión de Datos en Escenarios Intelixentes",
+    "Señales y Sistemas": "Sinais e Sistemas",
+    "Protección, Privacidad y Seguridad de Datos": "Protección, Privacidade e Seguridade de Datos",
+    "Teoría de la Información": "Teoría da Información", "Aprendizaje Automático I": "Aprendizaxe Automática I",
+    "Gestión de Proyectos de Ingeniería de Datos": "Xestión de Proxectos de Enxeñaría de Datos",
+    "Procesamiento de Lenguaje Escrito": "Procesamento de Linguaxe Escrita",
+    "Tecnologías de Integración": "Tecnoloxías de Integración",
+    // Certificaciones
+    "Datos y análisis": "Datos e análise",
+    "Inteligencia artificial con Claude (Anthropic Academy)": "Intelixencia artificial con Claude (Anthropic Academy)",
+    "Desarrollo y control de versiones": "Desenvolvemento e control de versións",
+    "Santander Open Academy. 8 horas y 2 módulos. Finalizado el 2 de octubre de 2026.": "Santander Open Academy. 8 horas e 2 módulos. Rematado o 2 de outubro de 2026.",
+    "Power BI Intermedio: análisis y modelado de datos": "Power BI Intermedio: análise e modelado de datos",
+    "Santander Open Academy. 8 horas y 2 módulos. Finalizado el 5 de octubre de 2026.": "Santander Open Academy. 8 horas e 2 módulos. Rematado o 5 de outubro de 2026.",
+    "15 cursos completados entre septiembre y octubre de 2026": "15 cursos completados entre setembro e outubro de 2026",
+    "Construcción de aplicaciones sobre la API de Claude.": "Construción de aplicacións sobre a API de Claude.",
+    "El manual del SDLC nativo de IA": "O manual do SDLC nativo de IA",
+    "Construir equipos humano-agente efectivos (beta)": "Construír equipos humano-axente efectivos (beta)",
+    "Capacidades y limitaciones de la IA": "Capacidades e limitacións da IA",
+    // Idiomas
+    "Español / Gallego": "Español / Galego"
+  };
+  const walk = o => {
+    if (Array.isArray(o)) o.forEach(walk);
+    else if (o && typeof o === 'object') {
+      if (typeof o.es === 'string') { if (D[o.es] != null) o.gl = D[o.es]; }
+      else Object.values(o).forEach(walk);
+    }
+  };
+  [SKILLS, EDUCATION, EXPERIENCE, HONORS_COURSES, CERT_GROUPS, LANGUAGES].forEach(walk);
+
+  const set = (o, s) => { if (o && typeof o === 'object' && s != null) o.gl = s; };
+
+  /* ---- Sobre min ---- */
+  ABOUT.short.gl = `Graduado en <strong>Ciencia e Enxeñaría de Datos</strong> cunha sólida base en <strong>modelado predictivo</strong>, <strong>aprendizaxe automática</strong>, <strong>estatística</strong> e <strong>enxeñaría de datos</strong>. Sigo de preto os avances en <strong>intelixencia artificial</strong> e interésanme as novas tecnoloxías, modelos e ferramentas que están a transformar o sector.`;
+  ABOUT.long.gl = [
+    `Son graduado en <strong>Ciencia e Enxeñaría de Datos</strong> pola <strong>Universidade da Coruña</strong>, cunha formación que une a parte máis técnica da enxeñaría de datos (bases de datos, almacéns de datos, procesamento distribuído e plataformas cloud) coa ciencia de datos: estatística avanzada, aprendizaxe automática, series temporais, PLN, visión por computador e sistemas de recomendación.`,
+    `Realicei prácticas no departamento de <strong>AI &amp; Data de Deloitte</strong>, onde traballei con <strong>Snowflake, dbt e Palantir</strong> en proxectos de enxeñaría de datos nun contorno profesional real, colaborando con equipos multidisciplinares. O meu <strong>Traballo de Fin de Grao</strong>, cualificado cun <strong>9</strong>, aplicou aprendizaxe automática á detección temperá do trastorno do espectro autista.`,
+    `Proximamente cursarei o <strong>Máster en Análise e Visualización de Datos Masivos (Big Data)</strong> en <strong>UNIR</strong>. Defíneme a curiosidade, a axilidade de aprendizaxe e as ganas de seguir medrando nun sector que non deixa de evolucionar.`
+  ];
+  EXPERIENCE[0].bullets.gl = [
+    `Formación e traballo con ferramentas de enxeñaría de datos: Snowflake, dbt e Palantir.`,
+    `Participación en proxectos de enxeñaría de datos nun contorno profesional real, colaborando con equipos multidisciplinares en iniciativas de transformación dixital.`,
+    `Modelado e orquestración ELT con dbt (tests de calidade, liñaxe e snapshots SCD2) e xestión do almacén de datos en Snowflake (stages, streams e tasks).`,
+    `Documentación técnica de procesos e resultados de proxectos de datos.`
+  ];
+  SOFT_SKILLS.gl = [`Traballo en equipo`, `Comunicación`, `Proactividade`, `Axilidade de aprendizaxe`, `Adaptabilidade`, `Resolución de problemas`, `Creatividade`, `Curiosidade`, `Actitude positiva`];
+  PERSONAL_INTRO.gl = `Fóra da pantalla son unha persoa curiosa e sociable. Móvome entre o deporte, a música e o cine, e o que máis gozo é compartir tempo, ideas e aprendizaxes coa xente que teño preto.`;
+  const IT = [
+    [`Deporte`, `O deporte sempre estivo presente na miña vida: xoguei ao fútbol, ao baloncesto e ao fútbol sala, e practiquei atletismo. Hoxe sigo indo ao ximnasio con regularidade, porque me aporta constancia, disciplina e enerxía para o resto do día.`],
+    [`Música e cine`, `Estudei solfexo e toquei a guitarra durante cinco anos, e a música segue acompañándome a diario. Tamén me encanta o cine: unha boa película é unha forma estupenda de desconectar e de descubrir outras historias e puntos de vista.`],
+    [`Amigos e aprendizaxe`, `Gústame quedar cos meus amigos, falar, compartir ideas e aprender deles. Creo que moitas das mellores ideas nacen dunha boa conversa, e que se aprende máis cando se aprende en compañía.`],
+    [`Viaxes`, `Apaixóname coñecer outros países e culturas. Viaxar ábreme a mente, sácame da rutina e ensíname a ver as cousas desde perspectivas moi distintas á miña.`]
+  ];
+  IT.forEach((r, i) => { set(INTERESTS[i].title, r[0]); set(INTERESTS[i].text, r[1]); });
+  set(SITE.lifePhotos[0].alt, `Ángel diante do Coliseo de Roma`);
+
+  /* ---- Proxectos: traducións por posición do bloque ---- */
+  const AP = (blocks, m) => Object.entries(m).forEach(([i, v]) => {
+    const b = blocks[+i]; if (!b) return;
+    switch (b.type) {
+      case 'h': case 'h3': case 'p': case 'note': set(b.t, v); break;
+      case 'tiles': case 'tabs': case 'accordion': v.forEach((r, j) => { set(b.items[j].t, r[0]); set(b.items[j].d, r[1]); }); break;
+      case 'people': v.forEach((r, j) => { set(b.items[j].role, r[0]); set(b.items[j].bio, r[1]); }); break;
+      case 'kpis': v.forEach((l, j) => set(b.items[j].l, l)); break;
+      case 'fig': set(b.alt, v[0]); set(b.caption, v[1]); break;
+      case 'chipgroups': v.forEach((r, j) => { set(b.items[j].t, r[0]); b.items[j].chips.gl = r[1]; }); break;
+    }
+  });
+
+  const tfg = PROJECTS.find(p => p.id === 'tfg');
+  set(tfg.date, `Outubro 2025 – Xullo 2026`);
+  set(tfg.title, `TFG: Aprendizaxe automática para a detección temperá do TEA`);
+  set(tfg.short, `Un sistema de intelixencia artificial que axuda a detectar o autismo (TEA) de forma temperá a partir de cuestionarios clínicos. Con só 20 das 216 variables recollidas, clasifica ben a case 9 de cada 10 persoas.`);
+  set(tfg.by, `Dirixido por Verónica Bolón Canedo e Brais Cancela Barizo · Universidade da Coruña`);
+  AP(tfg.blocks, {
+    0: `Introdución`,
+    1: `O meu Traballo de Fin de Grao é un <strong>sistema de cribado do Trastorno do Espectro Autista (TEA)</strong> baseado en aprendizaxe automática, é dicir, programas que aprenden patróns a partir de exemplos. Non busca substituír o profesional, senón axudarlle a decidir <strong>a que persoas convén facer unha avaliación en profundidade</strong>, de forma máis rápida e con menos cuestionarios.`,
+    2: `Dirixido por dous investigadores do grupo <strong>LIDIA</strong> (intelixencia artificial) do <strong>CITIC</strong>, con datos clínicos reais cedidos por unha investigadora do TEA:`,
+    3: [
+      [`Profesora Titular · Universidade da Coruña`, `Experta en aprendizaxe automática e <strong>selección de características</strong>, a técnica central deste TFG. Premio Nacional de Investigación para Novos María Andresa Casamayor en Matemáticas e TIC.`],
+      [`Profesor Titular · Universidade da Coruña`, `Doutor en Intelixencia Artificial e Ciencias da Computación, cunha tese sobre modelado de escenas dinámicas e comportamento de traxectorias.`]
+    ],
+    4: `Por que`,
+    5: `O TEA é unha condición do neurodesenvolvemento que afecta á comunicación, á relación cos demais e ao comportamento. <strong>Non existe unha proba obxectiva</strong> (como unha análise de sangue) que o detecte: o diagnóstico baséase en observar a conduta e en entrevistas e cuestionarios ás familias.`,
+    6: [
+      [`Un proceso lento e subxectivo`, `A demanda medra e os servizos sanitarios están saturados, con longas listas de espera.`],
+      [`Canto antes, mellor`, `Detectalo pronto (idealmente entre os 18 e os 30 meses) aumenta o impacto dos apoios.`],
+      [`Desigualdade de acceso`, `Os apoios esixen persoal especializado, o que prexudica a países e familias con menos recursos.`],
+      [`1 de cada 100 nenos`, `É a prevalencia do autismo segundo a OMS.`]
+    ],
+    7: `De aí a idea dunha ferramenta <strong>rápida, obxectiva e escalable</strong> que complemente o cribado tradicional.`,
+    8: `Os datos e o reto`,
+    9: `Traballei cunha base de datos clínica real de <strong>209 persoas</strong> (111 con TEA e 98 sen el, como grupo de control) de <strong>Galicia e Uruguai</strong>. De cada unha recolléronse <strong>216 datos</strong>: idade, sexo, saúde, medicación e as respostas a dous cuestionarios estándar:`,
+    10: [
+      [null, `Mide as habilidades do día a día (comunicarse, moverse polo barrio, relacionarse) e os problemas de conduta.`],
+      [null, `A escala de Gilliam, que valora condutas típicas do autismo.`]
+    ],
+    11: `Tres obstáculos`,
+    12: [
+      [`Máis datos que persoas`, `Con 216 datos e só 209 persoas, é doado que un modelo «memorice» en vez de aprender (sobreaxuste).`],
+      [`Datos incompletos`, `O 12,39 % das respostas estaba baleiro.`],
+      [`Mostra con sesgo`, `A parte uruguaia procede sobre todo de centros de educación especial (58 casos con TEA fronte a 12 controis).`]
+    ],
+    13: [`Matriz de valores ausentes do dataset`, `Cada fila é unha persoa e cada columna unha pregunta; os ocos brancos son respostas que faltan. Concéntranse nun grupo de preguntas e en parte da mostra.`],
+    14: `Primeira ollada`,
+    15: `Antes de adestrar nada, explorei os datos con técnicas que resumen moitas dimensións nun plano (PCA, t-SNE e UMAP). Os dous grupos <strong>sepáranse en parte, pero solápanse bastante</strong>, o que anticipa que non é un problema trivial.`,
+    16: [`Proxeccións PCA, t-SNE e UMAP dos bloques funcionais`, `Cada punto é unha persoa (azul: TEA, vermello: control). Proxeccións PCA, t-SNE e UMAP.`],
+    17: `Como o fixen`,
+    18: `O esquema resume o percorrido completo, desde os datos orixinais ata o ranking final das configuracións probadas.`,
+    19: [`Esquema do pipeline experimental`, `Pipeline completo do proxecto.`],
+    20: `Preme en cada paso para ver o detalle.`,
+    21: [
+      [`Preparar`, `Convertín as respostas a números, descartei as 25 preguntas con máis da metade das respostas baleiras, <strong>enchín os ocos restantes</strong> usando persoas parecidas (imputación KNN) e puxen todas as variables nunha <strong>mesma escala</strong>, para que ningunha pese máis só polas súas unidades.`],
+      [`Validar`, `Dividín as persoas en <strong>5 grupos</strong>: adéstrase con 4 e próbase co 5.º, rotando. Así <strong>cada persoa avalíase sen que o modelo a vise antes</strong>, e os resultados son fiables mesmo con poucos datos. Todo o preprocesado usa só os datos de adestramento de cada rolda, para non «facer trampas» (fuga de información).`],
+      [`Elixir variables`, `Probei <strong>6 métodos de selección de variables</strong> (Información Mutua, ANOVA, ReliefF, mRMR, SVM-RFE e E2EFS) que puntúan que datos achegan máis. E2EFS é unha rede neuronal que aprende a elixir as súas propias variables mentres se adestra. Cada método quedaba coas 5, 10, 20, 30 ou 50 mellores.`],
+      [`Adestrar`, `Combinei cada método con <strong>6 algoritmos de clasificación</strong>: SVM, rede neuronal (MLP), árbore de decisión, Random Forest, Gradient Boosting e regresión loxística.`],
+      [`Medir`, `Avaliei cada combinación con 5 métricas. A principal foi o <strong>F1</strong>, que equilibra dúas cousas: non dar falsas alarmas e non deixar casos sen detectar.`],
+      [`Afinar`, `Coas 20 variables finais, probei de forma sistemática moitas configuracións de cada modelo (GridSearch) para sacarlle o máximo partido.`]
+    ],
+    22: `Decisións tomadas con datos`,
+    23: [
+      [`Descartar preguntas case baleiras en vez de enchelas`, `Encher distorsionaba menos os datos, pero ao comparar ambas as estratexias, descartar deu resultados algo mellores (menos de 2 puntos de diferenza) e un proceso máis simple.`],
+      [`Quitar o país de procedencia`, `Se se incluía, o modelo podía «aprender» que Uruguai significa TEA, o que non é medicina senón sesgo de mostraxe. Quitalo non empeorou os resultados, comprobado cunha proba estatística (Wilcoxon).`],
+      [`Quedar con 20 variables`, `A partir de aí, engadir máis mellora menos de 1 punto, e 20 é o bastante pequeno como para interpretalo clinicamente.`]
+    ],
+    24: `Resultados`,
+    25: [
+      `F1: equilibrio entre falsas alarmas e casos non detectados`,
+      `ROC-AUC: capacidade de distinguir ambos os grupos (1 = perfecto, 0,5 = azar)`,
+      `Precisión: de cada 100 casos marcados como TEA, 89 o son`,
+      `Recall: de cada 100 persoas con TEA, detecta 87`,
+      `variables abondan: redúcese o cuestionario nun 91 %`,
+      `persoas ben clasificadas`
+    ],
+    26: `O mellor modelo foi unha <strong>rede neuronal sinxela (MLP)</strong> dunha soa capa con 50 neuronas, que mellorou case 10 puntos ao afinala. A regresión loxística, moito máis simple, quedou moi preto (cun ROC-AUC incluso maior, 0,93), así que <strong>non fai falta un modelo complexo</strong>: o que importa é elixir ben as variables.`,
+    27: [`Avaliación do modelo gañador`, `Arriba á esquerda: acertos e erros. Acertou con 85 controis e 99 persoas con TEA, e fallou con 13 e 12. Os erros repártense por igual e concéntranse nos casos máis ambiguos.`],
+    28: `Ademais, o limiar de decisión é axustable: nun uso real poderíase priorizar detectar máis casos aínda que suba o número de falsas alarmas.`,
+    29: `As variables elixidas teñen sentido clínico`,
+    30: `O máis valioso quizais non son os números: as <strong>20 variables</strong> que os métodos elixiron <strong>non son casuais</strong>. Repártense entre os <strong>3 dominios</strong> cos que o manual diagnóstico DSM-5 describe o autismo, veñen dos dous cuestionarios e cada unha ten respaldo na literatura clínica.`,
+    31: [
+      [`Interacción social`, [`Permanecer á parte`, `Evitar o contacto ocular`, `Esperar o turno`, `Ofrecer axuda`, `Moverse con autonomía polo barrio`]],
+      [`Comunicación`, [`Intercambiar obxectos`, `Contar unha historia`, `Non iniciar conversas`, `Repetir sons sen significado`]],
+      [`Condutas repetitivas e restritivas`, [`Facer cousas repetidamente`, `Frecuencia de estereotipias`, `Responder negativamente a ordes`, `Retraemento`]]
+    ],
+    32: `Tamén aparece un dato clínico, a <strong>medicación activa</strong>, relacionada con condicións frecuentes xunto ao TEA, como o TDAH. Que os datos e a clínica coincidan é un resultado en si mesmo: o modelo non só acerta, senón que o fai <strong>por motivos razoables</strong>.`,
+    33: `Limitacións e traballo futuro`,
+    34: `É unha ferramenta de <strong>apoio ao cribado, non un diagnóstico</strong>, e convén coñecer os seus límites:`,
+    35: [
+      [`Poucos datos`, `Con 209 persoas, os resultados poderían variar con outra mostra.`],
+      [`Sesgo xeográfico`, `A mostra non representa a toda a poboación con TEA.`],
+      [`Subxectividade`, `Os cuestionarios respóndenos familiares e distintas persoas puntúan distinto.`],
+      [`Sen validación externa`, `Só se probou con estes mesmos datos (validación cruzada), non cun grupo independente.`]
+    ],
+    36: `Próximos pasos`,
+    37: [
+      [`Máis datos`, `Ampliar con máis centros clínicos e máis casos de control de centros ordinarios.`],
+      [`Outras fontes`, `Incorporar EEG, resonancia, análise da linguaxe e seguimento ao longo do tempo.`],
+      [`Validación externa`, `Probar o modelo cun grupo independente en centros colaboradores.`],
+      [`Aplicación web ou móbil`, `Unha ferramenta onde o profesional introduza os datos e obteña unha estimación do risco, coas variables que máis pesaron.`]
+    ],
+    38: `Tecnoloxías`
+  });
+
+  const bc = PROJECTS.find(p => p.id === 'bicicoruna');
+  set(bc.title, `PedalIA: predición e operacións para BiciCoruña`);
+  set(bc.short, `Unha aplicación web que segue en tempo real as estacións de BiciCoruña e predí cantas bicis haberá en cada unha durante as próximas 12 horas. Un modelo XGBoost por estación, cun erro medio de 0,65 bicis, e un sistema que se actualiza só.`);
+  AP(bc.blocks, {
+    0: `Introdución`,
+    1: `<strong>PedalIA</strong> é un proxecto persoal de principio a fin: recolle datos do sistema público de bicicletas da Coruña, <strong>adestra modelos de aprendizaxe automática</strong> con eles e ofrece o resultado nunha aplicación web pública. Responde á pregunta que se fai calquera usuario antes de saír de casa: <strong>haberá unha bici (ou un oco para deixala) cando chegue?</strong>`,
+    2: `Por que`,
+    3: `Os mapas de bicicletas só mostran o <strong>estado actual</strong>, pero o que importa é o estado <strong>cando chegas</strong>: unha estación con 6 bicis agora pode estar baleira en media hora. Por iso a aplicación deseñouse para tres perfís:`,
+    4: [
+      [`Usuario diario`, `Consulta a predición da súa estación habitual antes de saír da casa ou do traballo.`],
+      [`Turista ou ocasional`, `Descubre rutas, desniveis e o estado do tempo e do mar.`],
+      [`Xestor de flota`, `Detecta estacións baleiras ou saturadas que precisan reequilibrio.`]
+    ],
+    5: `Arquitectura`,
+    6: `Todo o sistema é <strong>serverless</strong>: as tarefas programadas corren en GitHub Actions, os datos viven en PostgreSQL xestionado e a web é estática. Non hai ningún servidor propio que manter.`,
+    7: [`Arquitectura de PedalIA`, `Das fontes de datos á aplicación, con tres fluxos automáticos.`],
+    8: `Como o fixen`,
+    9: `Preme en cada paso para ver o detalle.`,
+    10: [
+      [`Recoller`, `Un script en Python consulta a <strong>API de BiciCoruña</strong> (estándar GBFS / CityBikes) e <strong>Open-Meteo</strong> (clima e ondada). GitHub Actions execútao <strong>cada 10 minutos</strong> en horas de uso e cada hora de madrugada, gardando unha «foto» (<em>snapshot</em>) de cada estación.`],
+      [`Gardar`, `Os datos normalízanse en <strong>PostgreSQL (Supabase)</strong>, en cinco táboas. A seguridade por filas (<strong>RLS</strong>) permite lectura pública e deixa a escritura só aos procesos automáticos.`],
+      [`Variables`, `Preparo variables de calendario, meteoroloxía e de <strong>memoria da propia estación</strong>. A hora codifícase con <strong>seno e coseno</strong> para que o modelo entenda que as 23:00 e as 00:00 están preto, algo que un número do 0 ao 23 non reflicte.`],
+      [`Adestrar`, `Un modelo de regresión <strong>XGBoost por estación</strong>, porque cada unha ten o seu propio patrón (unha preto da universidade non se comporta como unha do paseo marítimo). Un workflow <strong>readestra cada semana</strong> para seguir o ritmo da cidade.`],
+      [`Predicir`, `Outro workflow xera a dispoñibilidade esperada de <strong>cada estación para cada unha das próximas 12 horas</strong> e gárdaa na táboa de predicións, lista para que a web a pinte ao instante.`],
+      [`Mostrar`, `Unha aplicación en <strong>JavaScript puro</strong> (sen frameworks, de carga rápida) le a base de datos por REST, debuxa o mapa con <strong>Leaflet</strong>, as gráficas con <strong>Chart.js</strong> e instálase como <strong>PWA</strong> con soporte sen conexión.`]
+    ],
+    11: `Modelo de datos e variables`,
+    12: [`Modelo de datos de PedalIA`, `Esquema relacional en PostgreSQL: o clima é unha serie temporal independente.`],
+    13: [
+      [`Calendario`, [`Hora (seno e coseno)`, `Día da semana`, `Fin de semana ou festivo`]],
+      [`Meteoroloxía`, [`Temperatura`, `Choiva (mm)`, `Vento`]],
+      [`Historia da estación`, [`Bicis en horas anteriores`, `Bicis do día anterior`, `Tendencia recente`]]
+    ],
+    14: `Resultados`,
+    15: [
+      `MAE medio: a predición desvíase, de media, menos dunha bici`,
+      `R² medio: explica ao redor do 79 % da variación de bicis`,
+      `modelos XGBoost adestrados: un por cada unha das 80 estacións`,
+      `rexistros históricos de snapshots usados para adestrar`,
+      `filas de adestramento tras procesar as variables`,
+      `predicións gardadas en cada execución, para 79 das 80 estacións`
+    ],
+    16: `Cifras do último adestramento. Medran e recalcúlanse cada semana co novo historial.`,
+    17: `Un erro medio inferior a unha bici abonda para decidir se saír da casa: a diferenza entre «hai 6» e «hai 7» raramente importa; a que importa é entre «hai» e «non hai».`,
+    18: `A aplicación`,
+    19: `Explora as pantallas e funcións. Preme nunha captura para ampliala.`,
+    20: [
+      [`Mapa en vivo`, `Todas as estacións coloreadas segundo a súa dispoñibilidade (verde: 5 ou máis bicis, laranxa: de 1 a 4, vermello: baleira), con buscador, filtros (favoritas, con bicis, con ocos) e xeolocalización. Arriba á dereita, o tempo e a ondada da Coruña.`],
+      [`Ficha de estación`, `Bicis e ocos libres en vivo, historial de ocupación das últimas 24 horas e acceso á <strong>predición IA a 12 horas</strong>, ás rutas a pé ou en bici e ao reporte de incidencias (bici danada, ancoraxe bloqueada, tótem, limpeza).`],
+      [`Dashboard de rede`, `Bicis dispoñibles, ocos libres, estacións activas e <strong>índice de saúde do sistema</strong>, coa distribución de dispoñibilidade e os rankings de estacións. Outras pestanas listan a ocupación por estación e as alertas de reequilibrio.`],
+      [`Rutas e altimetría`, `Rutas a pé ou en bici ata calquera estación, con tempo, distancia e un <strong>perfil de altitude</strong> cuxo cursor se sincroniza cun marcador sobre o mapa.`],
+      [`A miña actividade`, `Un rexistro das túas viaxes con distancia, duración, aforro de CO₂ e, ao chegar, <strong>canto acertou a predición</strong> fronte á dispoñibilidade real.`],
+      [`Extras`, `Modo escuro e claro, modo turista, favoritas e viaxes gardadas no propio navegador (sen contas nin seguimento) e instalación como app en iOS e Android.`]
+    ],
+    21: `Decisións e limitacións`,
+    22: [
+      [`Por que serverless?`, `GitHub Actions + Supabase + GitHub Pages dan un sistema gratuíto, sen mantemento e con despregamento automático en cada <em>commit</em>.`],
+      [`E a privacidade?`, `Favoritas, tema e viaxes gárdanse en <code>localStorage</code>: non hai contas, e por iso o historial non se sincroniza entre dispositivos.`],
+      [`Dependencia dunha API externa`, `Se BiciCoruña cambia ou corta a súa API, a inxesta detense. Ademais, as tarefas programadas de GitHub Actions poden retrasarse uns minutos, así que as lecturas non son perfectamente regulares.`],
+      [`Eventos imprevistos`, `Un concerto, un partido ou unha avaría masiva alteran a demanda e o modelo non os coñece.`]
+    ],
+    23: `Próximos pasos`,
+    24: [
+      [`Erro por estación`, `Panel público co MAE por estación e horizonte, non só a media.`],
+      [`Eventos da cidade`, `Incorporar o calendario de eventos como variable.`],
+      [`Avisos push`, `Aviso cando a estación favorita vaia quedar sen bicis ou sen ocos.`],
+      [`Contas opcionais`, `Sincronizar favoritas e viaxes entre dispositivos.`]
+    ],
+    25: `Tecnoloxías`
+  });
+})();

@@ -188,3 +188,37 @@ html{-webkit-text-size-adjust:100%}body{overflow-x:hidden}
 .th.emb{aspect-ratio:3/4}.th.emb iframe{width:100%;height:100%;border:0;display:block;background:#fff}
 
 .th.emb{aspect-ratio:auto}.perr{display:block;max-width:230px;color:#b00020;font-size:.68rem;line-height:1.2;word-break:break-word}
+
+
+/* v11: semáforo estilo macOS, cursor nativo, certificaciones en 2 columnas, iconos, visor, móvil */
+.dots button{background-repeat:no-repeat;background-position:center;background-size:64%}
+.dots:hover .x{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2.4 2.4l5.2 5.2M7.6 2.4L2.4 7.6' stroke='%234d0000' stroke-width='1.3' stroke-linecap='round' fill='none'/%3E%3C/svg%3E")}
+.dots:hover .m{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 5h6' stroke='%235a3a00' stroke-width='1.4' stroke-linecap='round' fill='none'/%3E%3C/svg%3E")}
+.dots:hover .z{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2.2 2.2h3.8L2.2 6zM7.8 7.8H4L7.8 4z' fill='%23024d0b'/%3E%3C/svg%3E")}
+/* cursor: flecha como en macOS; mano solo en enlaces y elementos que abren algo */
+button,.tb,.ic,.dock button,.dots button{cursor:default}
+a,.btn,.card,summary,.flt button,.seg button,.cb,.th,[data-copy]{cursor:pointer}
+.cta button.cb{cursor:pointer}
+.cur{display:none!important}
+/* certificaciones compactas en 2 columnas */
+.tl{min-width:0}
+.cg .tiles.c2{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.c2 .tl.cert{padding:10px 12px;gap:8px}.c2 .cert.feat{grid-column:1/-1}
+.c2 .cert .cl{width:30px;height:30px;padding:4px;border-radius:9px}
+.c2 .cert .ch{margin:0;gap:8px}.c2 .cert .ch b{font-size:.86rem;line-height:1.25}
+.c2 .cert .cb2 p{font-size:.8rem;margin:6px 0 0}
+/* iconos en vida personal */
+.ti{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.ti svg{width:22px;height:22px;flex:none;color:var(--c,var(--ac))}
+.nt{margin:-6px 0 14px}
+/* visor de imágenes */
+.detail figure img,.tp img,.ph img{cursor:zoom-in}
+#lb{position:fixed;inset:0;z-index:250;display:grid;place-items:center;padding:24px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);animation:fi .2s;cursor:zoom-out}
+#lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;background:#fff}
+#lb button{position:absolute;top:max(14px,env(safe-area-inset-top));right:16px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:#111;font-size:1.6rem;line-height:1}
+/* barra superior en móvil: el nombre ya no se solapa con los botones */
+@media(max-width:760px){
+.bar{gap:6px;padding:6px}
+.who{flex:1;min-width:0}.who b{white-space:normal;font-size:.88rem;line-height:1.1}
+}
+@media(max-width:430px){.mono-logo{display:none}}
