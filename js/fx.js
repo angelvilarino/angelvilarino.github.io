@@ -1,4 +1,4 @@
-/* Ángel OS · Cursor, partículas y pestañas */
+/* Ángel OS · Efectos (botones magnéticos, partículas), pestañas y visor de imágenes */
 'use strict';
 /* ---- Botones magnéticos (el cursor es el nativo del sistema, como en macOS) ---- */
 if (fine && !reduce) {
@@ -29,7 +29,15 @@ function pRun() {
 document.addEventListener('visibilitychange', pRun); let prz = 0; addEventListener('resize', () => { clearTimeout(prz); prz = setTimeout(pRun, 200); });
 
 /* ---- Pestañas del detalle de proyecto ---- */
-document.addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; const r = b.closest('.tabs'); $$('[data-tab]', r).forEach(x => x.setAttribute('aria-pressed', x === b)); $$('[data-p]', r).forEach(p => p.hidden = p.dataset.p !== b.dataset.tab); });
+const selTab = (b, focus) => { const r = b.closest('.tabs'); $$('[data-tab]', r).forEach(x => { const on = x === b; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; }); $$('[data-p]', r).forEach(p => p.hidden = p.dataset.p !== b.dataset.tab); if (focus) b.focus(); };
+document.addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) selTab(b); });
+/* Pestañas accesibles: flechas, Inicio y Fin */
+document.addEventListener('keydown', e => {
+  const b = e.target.closest && e.target.closest('[role=tab]'); if (!b) return;
+  const tabs = $$('[role=tab]', b.closest('.tabs')), i = tabs.indexOf(b), k = e.key; let n;
+  if (k === 'ArrowRight' || k === 'ArrowDown') n = (i + 1) % tabs.length; else if (k === 'ArrowLeft' || k === 'ArrowUp') n = (i - 1 + tabs.length) % tabs.length; else if (k === 'Home') n = 0; else if (k === 'End') n = tabs.length - 1; else return;
+  e.preventDefault(); selTab(tabs[n], true);
+});
 
 /* ---- Visor de imágenes (capturas y figuras de los proyectos) ---- */
 const lb = document.createElement('div'); lb.id = 'lb'; lb.hidden = true; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true');

@@ -19,6 +19,14 @@ $('#mu').addEventListener('click', () => {
   $('#mu').textContent = mOn ? 'Pause' : 'Play'; $('#mu').setAttribute('aria-pressed', mOn);
 });
 
-/* ---- GitHub en vivo (fallback silencioso si falla o hay límite de peticiones) ---- */
-fetch(`https://api.github.com/users/${CFG.gh}`).then(r => r.ok ? r.json() : Promise.reject()).then(u => { $('#ghn').textContent = u.public_repos; return fetch(`https://api.github.com/users/${CFG.gh}/repos?sort=pushed&per_page=1`); })
-  .then(r => r.ok ? r.json() : Promise.reject()).then(r => { $('#ghs').textContent = 'repos · ' + new Date(r[0].pushed_at).toLocaleDateString(lang); }).catch(() => {});
+/* ---- Último repositorio de GitHub (se guarda 1 h para no agotar el límite de la API; si falla, no se muestra nada) ---- */
+(function () {
+  const K = 'gh2', el = $('#w-gh');
+  const ago = d => { const s = Math.max(0, (Date.now() - new Date(d)) / 1000); let r; try { r = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' }); } catch (e) { r = new Intl.RelativeTimeFormat('es', { numeric: 'auto' }); }
+    for (const [u, n] of [['day', 86400], ['hour', 3600]]) if (s >= n) return r.format(-Math.floor(s / n), u); return r.format(-Math.max(1, Math.floor(s / 60)), 'minute'); };
+  const show = v => { $('#ghn').textContent = v.name; $('#ghs').textContent = ago(v.pushed); el.href = v.url; };
+  const c = store.g(K, null); if (c) show(c);
+  if (c && Date.now() - c.t < 3600e3) return;
+  fetch(`https://api.github.com/users/${CFG.gh}/repos?sort=pushed&per_page=8`).then(r => r.ok ? r.json() : Promise.reject())
+    .then(list => { const r = list.find(x => !x.fork && x.name.toLowerCase() !== (CFG.gh + '.github.io').toLowerCase()); if (!r) return; const v = { t: Date.now(), name: r.name, url: r.html_url, pushed: r.pushed_at }; store.s(K, v); show(v); }).catch(() => {});
+})();
