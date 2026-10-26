@@ -49,19 +49,18 @@ R.life = () => `<p class="lead2">${tx(PERSONAL_INTRO)}</p><div class="tiles">${I
 /* Miniaturas: se dibujan desde el propio PDF con pdf.js incluido en assets/vendor/pdfjs (sin CDN ni JPG). Respeta vertical/horizontal. */
 let pdfjsP;
 const pdfjs = () => pdfjsP || (pdfjsP = import(new URL('assets/vendor/pdfjs/pdf.min.js', document.baseURI).href).then(m => { m.GlobalWorkerOptions.workerSrc = new URL('assets/vendor/pdfjs/pdf.worker.min.js', document.baseURI).href; return m; }));
-/* Respaldo: PDF incrustado con la proporción real de la 1.ª página (se lee de /MediaBox) para evitar huecos oscuros; muestra el motivo del fallo de pdf.js */
+/* Respaldo: PDF incrustado con la proporción real de la 1.ª página (se lee de /MediaBox) para evitar huecos oscuros (el motivo del fallo de pdf.js solo se escribe en la consola) */
 function thumbFallback(cv, a, err) {
-  const file = location.protocol === 'file:', msg = String((err && err.message) || err); console.warn(file ? 'Abierto como archivo (file://): usa un servidor local o GitHub Pages para ver las miniaturas.' : 'pdf.js falló:', cv.dataset.pdf, err);
+  const file = location.protocol === 'file:'; console.warn(file ? 'Abierto como archivo (file://): usa un servidor local o GitHub Pages para ver las miniaturas.' : 'pdf.js falló:', cv.dataset.pdf, err);
   (file ? Promise.reject() : fetch(cv.dataset.pdf)).then(r => r.arrayBuffer()).then(b => { const m = new TextDecoder('latin1').decode(b).match(/\/MediaBox\s*\[\s*([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)/); return m ? (m[3] - m[1]) / (m[4] - m[2]) : 0.75; }).catch(() => 0.75).then(r => {
     const f = document.createElement('iframe'); f.src = cv.dataset.pdf + '#toolbar=0&navpanes=0&scrollbar=0&view=Fit'; f.tabIndex = -1; f.title = '';
     a.classList.add('emb'); if (r > 1) a.classList.add('land'); a.style.aspectRatio = String(r); cv.replaceWith(f);
-    if (!file) a.insertAdjacentHTML('afterend', '<small class="perr">pdf.js: ' + msg.replace(/</g, '&lt;') + '</small>');
   });
 }
 function thumbs(root) {
   $$('canvas[data-pdf]', root).forEach(cv => {
     if (cv.dataset.done) return; cv.dataset.done = 1; const a = cv.parentNode;
-    pdfjs().then(m => m.getDocument(cv.dataset.pdf).promise).then(d => d.getPage(1)).then(p => {
+    pdfjs().then(m => m.getDocument(new URL(cv.dataset.pdf, document.baseURI).href).promise).then(d => d.getPage(1)).then(p => {
       const v0 = p.getViewport({ scale: 1 }), v = p.getViewport({ scale: 420 / v0.width });
       cv.width = v.width; cv.height = v.height; if (v0.width > v0.height) a.classList.add('land');
       return p.render({ canvasContext: cv.getContext('2d'), viewport: v }).promise;
