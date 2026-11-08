@@ -59,7 +59,6 @@ document.addEventListener('click', e => {
   const f = e.target.closest('[data-f]'); if (f) { const r = f.closest('.body'); $$('[data-f]', r).forEach(b => b.setAttribute('aria-pressed', b === f)); $$('.sg', r).forEach(s => s.hidden = f.dataset.f !== 'all' && s.dataset.cat !== f.dataset.f); return; }
   const s = e.target.closest('[data-set]'); if (s) { const v = s.dataset.v, k = s.dataset.set; if (k === 'lang') switchLang(v); else setS(k, v === 'true' ? true : v === 'false' ? false : v); }
 });
-document.addEventListener('submit', e => { if (e.target.id === 'mf') { e.preventDefault(); const f = new FormData(e.target); location.href = `mailto:${SITE.email}?subject=${encodeURIComponent(f.get('s'))}&body=${encodeURIComponent(f.get('b'))}`; } });
 $('#back').addEventListener('click', () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
 
 /* ---- Cierre de sesión: cortina + progreso ---- */
@@ -85,12 +84,13 @@ let warmed = 0;
 const warm = e => { if (!warmed && e.target.closest && e.target.closest('[data-go="certs"]')) { warmed = 1; pdfjs().catch(() => {}); } };
 document.addEventListener('pointerover', warm, { passive: true }); document.addEventListener('focusin', warm);
 
-/* Eventos de uso (no hace nada sin GoatCounter): abrir ventana, descargar CV, copiar correo, enlaces salientes */
+/* Eventos de uso (no hace nada sin GoatCounter): abrir ventana, descargar CV, ver CV online, copiar correo, enlaces salientes */
 document.addEventListener('click', e => {
   const g = e.target.closest('[data-go]'); if (g) track('open/' + g.dataset.go);
   if (e.target.closest('[data-copy]')) track('copy-email');
   const a = e.target.closest('a[href]'); if (!a) return;
   if (a.hasAttribute('download')) track('cv-download');
-  else if (a.protocol === 'mailto:' || a.protocol === 'tel:') track(a.protocol.slice(0, -1));
+  else if (a.protocol === 'mailto:') track('mailto');
+  else if (a.hostname === location.hostname && /\/cv\/$/.test(a.pathname)) track('cv-online');
   else if (a.hostname && a.hostname !== location.hostname) track('out/' + a.hostname);
 });

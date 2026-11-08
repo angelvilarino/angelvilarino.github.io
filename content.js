@@ -2,9 +2,13 @@
    CONTENIDO DE LA WEB  (aquí editas textos, proyectos, enlaces, etc.)
 
    Todo texto traducible se escribe como { es: "...", en: "...", gl: "..." }.
-   Si falta un idioma, se muestra el español. Después de editar este archivo
-   ejecuta:  node build.mjs   (regenera index.html, /en/, /gl/, las páginas de
-   proyecto y el sitemap).
+   Si falta un idioma, se muestra el español. Al hacer push, GitHub Actions
+   ejecuta build.mjs y publica la web (en local: npm run dev).
+
+   Fechas que usa el build:
+   · SITE.updated  -> <lastmod> del sitemap (home y CV). Cámbiala al publicar cambios.
+   · project.updated (opcional) -> <lastmod> de esa página de proyecto.
+   · education.from / .to (AAAA-MM-DD) -> etiqueta "Próximamente" / "En curso" automática.
    ===================================================================== */
 
 /* ---------- Datos del sitio ---------- */
@@ -12,12 +16,11 @@
 const SITE = {
   name: "Ángel Vilariño García",
   email: "angelvg333@gmail.com",
-  phone: "+34 684 64 79 52",
-  phoneLink: "+34684647952",
   github: "https://github.com/angelvilarino",
   linkedin: "https://linkedin.com/in/%C3%A1ngel-vilari%C3%B1o-garc%C3%ADa-181594156",
   cv: { es: "assets/CV_ESP.pdf", en: "assets/CV_ENG.pdf" },
   photo: "assets/foto.jpg",
+  updated: "2026-11-08",
   /* Estadísticas sin cookies con GoatCounter (gratis): crea tu cuenta en goatcounter.com y pon aquí tu código
      (el de https://CÓDIGO.goatcounter.com). Vacío = sin estadísticas. */
   analytics: { goatcounter: "" },
@@ -36,98 +39,40 @@ const SITE = {
 /* ---------- Textos de la interfaz (es / en / gl) ---------- */
 const UI = {
   es: {
-    nav_home: "Inicio", nav_about: "Sobre mí", nav_projects: "Proyectos", lang_switch: "English",
-    theme_dark: "Modo oscuro", theme_light: "Modo claro", role: "Científico e Ingeniero de Datos",
-    hero_desc: "Graduado en Ciencia e Ingeniería de Datos por la Universidad de A Coruña, con conocimientos de ingeniería de datos, estadística, machine learning, IA generativa y visualización.",
-    cta_projects: "Ver proyectos", cta_cv: "Ver CV", cta_contact: "Contacto", toc: "En esta página",
-    s_about: "Sobre mí", s_recog: "Reconocimientos", s_projects: "Proyectos", s_skills: "Habilidades",
-    s_contact: "Contacto", s_experience: "Experiencia", s_education: "Formación", more_about: "Conocer más sobre mí",
-    more_recog: "Ver toda mi trayectoria académica", all_projects: "Ver todos los proyectos",
+    role: "Científico e Ingeniero de Datos",
+    s_about: "Sobre mí", s_recog: "Reconocimientos", s_projects: "Proyectos", s_skills: "Habilidades", s_contact: "Contacto",
     r_avg: "Nota media del grado", r_honors: "Matrículas de honor", r_tfg: "Nota del TFG",
-    r_abau: "Reconocimiento a los mejores expedientes de Bachillerato (ABAU 2022)", a_title: "Sobre mí",
-    a_edu: "Formación académica", a_exp: "Experiencia profesional", a_excel: "Excelencia académica",
-    a_cert: "Certificaciones", a_skills: "Habilidades y competencias", a_personal: "Vida personal",
-    a_skills_intro: "Mi formación combina la ingeniería de datos (modelado, pipelines, almacenes de datos, plataformas cloud) con la ciencia de datos (estadística, aprendizaje automático, NLP, visión artificial y sistemas de recomendación). A continuación, un resumen por áreas, junto con las habilidades personales que me definen.",
+    r_abau: "Reconocimiento a los mejores expedientes de Bachillerato (ABAU 2022)",
+    a_edu: "Formación académica", a_exp: "Experiencia profesional", a_cert: "Certificaciones",
     soft: "Habilidades personales", languages: "Idiomas", honors_btn: "Ver en qué asignaturas las obtuve",
-    honors_hide: "Ocultar asignaturas", honors_note: "Matrículas de honor por asignatura",
-    cert_view: "Ver certificado", cert_featured: "Destacada", avg_label: "Nota media", honors_label: "Matrículas",
-    tfg_label: "TFG", p_title: "Proyectos",
-    p_intro: "Una selección de trabajos académicos y personales. Pulsa en uno para ver todos los detalles.",
-    p_back: "Volver a proyectos", p_overview: "Resumen", p_detail: "Descripción detallada", p_stack: "Tecnologías",
-    p_results: "Resultados", p_gallery: "Galería", p_links: "Enlaces", p_metrics: "Cifras clave",
-    p_pipeline: "Pipeline experimental", p_img: "Imagen del proyecto", p_notfound: "Este proyecto no existe.",
-    l_demo: "Ver demo", l_memoria: "Memoria", l_repo: "Repositorio", l_web: "Web", c_email: "Correo electrónico",
-    c_phone: "Teléfono", c_github: "GitHub", c_linkedin: "LinkedIn", c_cv: "Descargar CV",
-    hero_hint: "Mueve el cursor sobre los puntos y haz clic", filters: "Filtrar habilidades", f_all: "Todas",
-    f_code: "Programación", f_ai: "IA y ciencia de datos", f_data: "Ingeniería de datos", f_viz: "Visualización y BI",
-    f_work: "Herramientas y gestión", tile_place: "Desde", tile_where: "A Coruña, Galicia", tile_time: "Hora local",
-    cert_open: "Ver los 15 cursos", cert_close: "Ocultar cursos", copy_email: "Copiar correo",
-    copied: "¡Correo copiado!", copied_btn: "Copiado", back_top: "Volver arriba",
-    foot_by: "Hecho a mano con HTML, CSS y JavaScript.", foot_role: "Científico e Ingeniero de Datos en A Coruña.",
-    foot_nav: "Navegación", foot_links: "Enlaces", close: "Cerrar", open_img: "Ampliar foto",
-    footer: "© 2026 Ángel Vilariño García"
+    honors_hide: "Ocultar asignaturas", honors_note: "Matrículas de honor por asignatura", cert_view: "Ver certificado",
+    l_demo: "Ver demo", l_memoria: "Memoria", l_repo: "Repositorio", l_web: "Web", c_email: "Correo electrónico", c_cv: "Descargar CV",
+    f_all: "Todas", f_code: "Programación", f_ai: "IA y ciencia de datos", f_data: "Ingeniería de datos", f_viz: "Visualización y BI",
+    f_work: "Herramientas y gestión", tile_where: "A Coruña, Galicia"
   },
   en: {
-    nav_home: "Home", nav_about: "About me", nav_projects: "Projects", lang_switch: "Español", theme_dark: "Dark mode",
-    theme_light: "Light mode", role: "Data Scientist & Data Engineer",
-    hero_desc: "Graduate in Data Science and Engineering from the University of A Coruña, with knowledge of data engineering, statistics, machine learning, generative AI and visualization.",
-    cta_projects: "View projects", cta_cv: "View CV", cta_contact: "Contact", toc: "On this page", s_about: "About me",
-    s_recog: "Achievements", s_projects: "Projects", s_skills: "Skills", s_contact: "Contact",
-    s_experience: "Experience", s_education: "Education", more_about: "Learn more about me",
-    more_recog: "See my full academic record", all_projects: "View all projects",
+    role: "Data Scientist & Data Engineer",
+    s_about: "About me", s_recog: "Achievements", s_projects: "Projects", s_skills: "Skills", s_contact: "Contact",
     r_avg: "Final degree GPA (out of 10)", r_honors: "Honors distinctions", r_tfg: "Thesis grade",
-    r_abau: "Recognition for the best high-school academic records (ABAU 2022)", a_title: "About me",
-    a_edu: "Education", a_exp: "Professional experience", a_excel: "Academic excellence", a_cert: "Certifications",
-    a_skills: "Skills & competencies", a_personal: "Personal life",
-    a_skills_intro: "My background blends data engineering (modelling, pipelines, data warehouses, cloud platforms) with data science (statistics, machine learning, NLP, computer vision and recommender systems). Below is a summary by area, along with the personal skills that define me.",
+    r_abau: "Recognition for the best high-school academic records (ABAU 2022)",
+    a_edu: "Education", a_exp: "Professional experience", a_cert: "Certifications",
     soft: "Soft skills", languages: "Languages", honors_btn: "See which courses they were earned in",
     honors_hide: "Hide courses", honors_note: "Honors distinctions by course", cert_view: "View certificate",
-    cert_featured: "Featured", avg_label: "Final GPA", honors_label: "Honors", tfg_label: "Thesis",
-    p_title: "Projects", p_intro: "A selection of academic and personal work. Click on one to see all the details.",
-    p_back: "Back to projects", p_overview: "Overview", p_detail: "Detailed description", p_stack: "Tech stack",
-    p_results: "Results", p_gallery: "Gallery", p_links: "Links", p_metrics: "Key figures",
-    p_pipeline: "Experimental pipeline", p_img: "Project image", p_notfound: "This project does not exist.",
-    l_demo: "Live demo", l_memoria: "Thesis report", l_repo: "Repository", l_web: "Website", c_email: "Email",
-    c_phone: "Phone", c_github: "GitHub", c_linkedin: "LinkedIn", c_cv: "Download CV",
-    hero_hint: "Move your cursor over the dots and click", filters: "Filter skills", f_all: "All",
-    f_code: "Programming", f_ai: "AI & data science", f_data: "Data engineering", f_viz: "Visualization & BI",
-    f_work: "Tools & management", tile_place: "Based in", tile_where: "A Coruña, Galicia", tile_time: "Local time",
-    cert_open: "See all 15 courses", cert_close: "Hide courses", copy_email: "Copy email", copied: "Email copied!",
-    copied_btn: "Copied", back_top: "Back to top", foot_by: "Handmade with HTML, CSS and JavaScript.",
-    foot_role: "Data Scientist & Data Engineer in A Coruña.", foot_nav: "Navigation", foot_links: "Links",
-    close: "Close", open_img: "Enlarge photo", footer: "© 2026 Ángel Vilariño García"
+    l_demo: "Live demo", l_memoria: "Thesis report", l_repo: "Repository", l_web: "Website", c_email: "Email", c_cv: "Download CV",
+    f_all: "All", f_code: "Programming", f_ai: "AI & data science", f_data: "Data engineering", f_viz: "Visualization & BI",
+    f_work: "Tools & management", tile_where: "A Coruña, Galicia"
   },
   gl: {
-    nav_home: "Inicio", nav_about: "Sobre min", nav_projects: "Proxectos", lang_switch: "Galego",
-    theme_dark: "Modo escuro", theme_light: "Modo claro", role: "Científico e Enxeñeiro de Datos",
-    hero_desc: "Graduado en Ciencia e Enxeñaría de Datos pola Universidade da Coruña, con coñecementos de enxeñaría de datos, estatística, machine learning, IA xenerativa e visualización.",
-    cta_projects: "Ver proxectos", cta_cv: "Ver CV", cta_contact: "Contacto", toc: "Nesta páxina",
-    s_about: "Sobre min", s_recog: "Recoñecementos", s_projects: "Proxectos", s_skills: "Habilidades",
-    s_contact: "Contacto", s_experience: "Experiencia", s_education: "Formación", more_about: "Coñecer máis sobre min",
-    more_recog: "Ver toda a miña traxectoria académica", all_projects: "Ver todos os proxectos",
+    role: "Científico e Enxeñeiro de Datos",
+    s_about: "Sobre min", s_recog: "Recoñecementos", s_projects: "Proxectos", s_skills: "Habilidades", s_contact: "Contacto",
     r_avg: "Nota media do grao", r_honors: "Matrículas de honra", r_tfg: "Nota do TFG",
-    r_abau: "Recoñecemento aos mellores expedientes de Bacharelato (ABAU 2022)", a_title: "Sobre min",
-    a_edu: "Formación académica", a_exp: "Experiencia profesional", a_excel: "Excelencia académica",
-    a_cert: "Certificacións", a_skills: "Habilidades e competencias", a_personal: "Vida persoal",
-    a_skills_intro: "A miña formación combina a enxeñaría de datos (modelado, pipelines, almacéns de datos, plataformas cloud) coa ciencia de datos (estatística, aprendizaxe automática, PLN, visión artificial e sistemas de recomendación). A continuación, un resumo por áreas, xunto coas habilidades persoais que me definen.",
+    r_abau: "Recoñecemento aos mellores expedientes de Bacharelato (ABAU 2022)",
+    a_edu: "Formación académica", a_exp: "Experiencia profesional", a_cert: "Certificacións",
     soft: "Habilidades persoais", languages: "Idiomas", honors_btn: "Ver en que materias as obtiven",
     honors_hide: "Ocultar materias", honors_note: "Matrículas de honra por materia", cert_view: "Ver certificado",
-    cert_featured: "Destacada", avg_label: "Nota media", honors_label: "Matrículas", tfg_label: "TFG",
-    p_title: "Proxectos",
-    p_intro: "Unha selección de traballos académicos e persoais. Preme nun para ver todos os detalles.",
-    p_back: "Volver a proxectos", p_overview: "Resumo", p_detail: "Descrición detallada", p_stack: "Tecnoloxías",
-    p_results: "Resultados", p_gallery: "Galería", p_links: "Ligazóns", p_metrics: "Cifras clave",
-    p_pipeline: "Pipeline experimental", p_img: "Imaxe do proxecto", p_notfound: "Este proxecto non existe.",
-    l_demo: "Ver demo", l_memoria: "Memoria", l_repo: "Repositorio", l_web: "Web", c_email: "Correo electrónico",
-    c_phone: "Teléfono", c_github: "GitHub", c_linkedin: "LinkedIn", c_cv: "Descargar CV",
-    hero_hint: "Move o cursor sobre os puntos e fai clic", filters: "Filtrar habilidades", f_all: "Todas",
-    f_code: "Programación", f_ai: "IA e ciencia de datos", f_data: "Enxeñaría de datos", f_viz: "Visualización e BI",
-    f_work: "Ferramentas e xestión", tile_place: "Desde", tile_where: "A Coruña, Galicia", tile_time: "Hora local",
-    cert_open: "Ver os 15 cursos", cert_close: "Ocultar cursos", copy_email: "Copiar correo",
-    copied: "Correo copiado!", copied_btn: "Copiado", back_top: "Volver arriba",
-    foot_by: "Feito a man con HTML, CSS e JavaScript.", foot_role: "Científico e Enxeñeiro de Datos na Coruña.",
-    foot_nav: "Navegación", foot_links: "Ligazóns", close: "Pechar", open_img: "Ampliar foto",
-    footer: "© 2026 Ángel Vilariño García"
+    l_demo: "Ver demo", l_memoria: "Memoria", l_repo: "Repositorio", l_web: "Web", c_email: "Correo electrónico", c_cv: "Descargar CV",
+    f_all: "Todas", f_code: "Programación", f_ai: "IA e ciencia de datos", f_data: "Enxeñaría de datos", f_viz: "Visualización e BI",
+    f_work: "Ferramentas e xestión", tile_where: "A Coruña, Galicia"
   }
 };
 
@@ -142,17 +87,17 @@ const ABOUT = {
     es: [
       "Soy graduado en <strong>Ciencia e Ingeniería de Datos</strong> por la <strong>Universidad de A Coruña</strong>, con una formación que une la parte más técnica de la ingeniería de datos (bases de datos, almacenes de datos, procesamiento distribuido y plataformas cloud) con la ciencia de datos: estadística avanzada, aprendizaje automático, series temporales, NLP, visión por computador y sistemas de recomendación.",
       "He realizado prácticas en el departamento de <strong>AI &amp; Data de Deloitte</strong>, donde trabajé con <strong>Snowflake, dbt y Palantir</strong> en proyectos de ingeniería de datos en un entorno profesional real, colaborando con equipos multidisciplinares. Mi <strong>Trabajo de Fin de Grado</strong>, calificado con un <strong>9</strong>, aplicó aprendizaje automático a la detección temprana del trastorno del espectro autista.",
-      "Próximamente cursaré el <strong>Máster en Análisis y Visualización de Datos Masivos (Big Data)</strong> en <strong>UNIR</strong>. Me define la curiosidad, la agilidad de aprendizaje y las ganas de seguir creciendo en un sector que no deja de evolucionar."
+      "Mi formación continúa con el <strong>Máster en Análisis y Visualización de Datos Masivos (Big Data)</strong> en <strong>UNIR</strong> (nov. 2026 – jul. 2027). Me define la curiosidad, la agilidad de aprendizaje y las ganas de seguir creciendo en un sector que no deja de evolucionar."
     ],
     en: [
       "I hold a degree in <strong>Data Science and Engineering</strong> from the <strong>University of A Coruña</strong>, with training that combines the technical side of data engineering (databases, data warehouses, distributed processing and cloud platforms) with data science: advanced statistics, machine learning, time series, NLP, computer vision and recommender systems.",
       "I completed an internship in the <strong>AI &amp; Data department at Deloitte</strong>, working with <strong>Snowflake, dbt and Palantir</strong> on data engineering projects in a real professional environment, collaborating with multidisciplinary teams. My <strong>Bachelor's thesis</strong>, graded <strong>9</strong>, applied machine learning to the early detection of autism spectrum disorder.",
-      "I will soon start the <strong>Master's in Big Data Analysis and Visualization</strong> at <strong>UNIR</strong>. Curiosity, fast learning and the drive to keep growing in a constantly evolving field define me."
+      "My training continues with the <strong>Master's in Big Data Analysis and Visualization</strong> at <strong>UNIR</strong> (Nov 2026 – Jul 2027). Curiosity, fast learning and the drive to keep growing in a constantly evolving field define me."
     ],
     gl: [
       "Son graduado en <strong>Ciencia e Enxeñaría de Datos</strong> pola <strong>Universidade da Coruña</strong>, cunha formación que une a parte máis técnica da enxeñaría de datos (bases de datos, almacéns de datos, procesamento distribuído e plataformas cloud) coa ciencia de datos: estatística avanzada, aprendizaxe automática, series temporais, PLN, visión por computador e sistemas de recomendación.",
       "Realicei prácticas no departamento de <strong>AI &amp; Data de Deloitte</strong>, onde traballei con <strong>Snowflake, dbt e Palantir</strong> en proxectos de enxeñaría de datos nun contorno profesional real, colaborando con equipos multidisciplinares. O meu <strong>Traballo de Fin de Grao</strong>, cualificado cun <strong>9</strong>, aplicou aprendizaxe automática á detección temperá do trastorno do espectro autista.",
-      "Proximamente cursarei o <strong>Máster en Análise e Visualización de Datos Masivos (Big Data)</strong> en <strong>UNIR</strong>. Defíneme a curiosidade, a axilidade de aprendizaxe e as ganas de seguir medrando nun sector que non deixa de evolucionar."
+      "A miña formación continúa co <strong>Máster en Análise e Visualización de Datos Masivos (Big Data)</strong> en <strong>UNIR</strong> (nov. 2026 – xul. 2027). Defíneme a curiosidade, a axilidade de aprendizaxe e as ganas de seguir medrando nun sector que non deixa de evolucionar."
     ]
   }
 };
@@ -167,7 +112,6 @@ const EXPERIENCE = [
       en: "Curricular internship in the AI & Data department",
       gl: "Prácticas curriculares no departamento de AI & Data"
     },
-    short: { es: "Prácticas en AI & Data", en: "Internship in AI & Data" },
     dates: "Sep 2025 – Nov 2025",
     place: "A Coruña",
     bullets: {
@@ -193,11 +137,11 @@ const EXPERIENCE = [
   }
 ];
 
-/* ---------- Formación ---------- */
+/* ---------- Formación ----------
+   from / to (AAAA-MM-DD): si existen, la etiqueta "Próximamente" / "En curso" se calcula sola según la fecha. */
 const EDUCATION = [
   {
     org: "UNIR",
-    orgFull: "UNIR, Universidad Internacional de La Rioja",
     url: "https://www.unir.net",
     title: {
       es: "Máster en Análisis y Visualización de Datos Masivos (Big Data)",
@@ -205,12 +149,13 @@ const EDUCATION = [
       gl: "Máster en Análise e Visualización de Datos Masivos (Big Data)"
     },
     dates: "Nov 2026 – Jul 2027",
-    place: { es: "Online", en: "Online" },
+    from: "2026-11-01",
+    to: "2027-07-31",
+    place: { es: "Online", en: "Online", gl: "En liña" },
     detail: {
       es: "Hadoop, Spark, Kafka, Docker/Kubernetes, NoSQL, D3.js, Tableau, Power BI",
       en: "Hadoop, Spark, Kafka, Docker/Kubernetes, NoSQL, D3.js, Tableau, Power BI"
-    },
-    upcoming: { es: "Próximamente", en: "Upcoming" }
+    }
   },
   {
     org: { es: "Universidad de A Coruña", en: "University of A Coruña", gl: "Universidade da Coruña" },
@@ -243,7 +188,7 @@ const EDUCATION = [
   {
     org: "Code Monsters",
     url: "https://www.codemonsters.es",
-    title: { es: "Curso de Python", en: "Python course" },
+    title: { es: "Curso de Python", en: "Python course", gl: "Curso de Python" },
     dates: "100 h",
     place: "",
     detail: null
@@ -251,7 +196,7 @@ const EDUCATION = [
   {
     org: "Centro de Formación Easy System",
     url: "https://www.easysystem.es",
-    title: { es: "Curso de Java", en: "Java course" },
+    title: { es: "Curso de Java", en: "Java course", gl: "Curso de Java" },
     dates: "100 h",
     place: "",
     detail: null
@@ -349,17 +294,25 @@ const CERT_GROUPS = [
     ]
   },
   {
+    title: { es: "IA generativa y agentes", en: "Generative AI & agents", gl: "IA xenerativa e axentes" },
+    cols: true,
+    items: [
+      { title: "Hugging Face AI Agents Course", meta: "Hugging Face", logo: "assets/logos/huggingface.svg" },
+      { title: "Oracle Agentic AI Foundations", meta: "Oracle", logo: "assets/logos/oracle.svg" },
+      { title: "AWS: Foundations of Prompt Engineering", meta: "AWS", logo: "assets/logos/aws.svg" }
+    ]
+  },
+  {
     title: {
       es: "Inteligencia artificial con Claude (Anthropic Academy)",
       en: "AI with Claude (Anthropic Academy)",
       gl: "Intelixencia artificial con Claude (Anthropic Academy)"
     },
-    collapsible: true,
     cols: true,
     summary: {
-      es: "15 cursos completados entre septiembre y octubre de 2026",
-      en: "15 courses completed between September and October 2026",
-      gl: "15 cursos completados entre setembro e outubro de 2026"
+      es: "16 cursos completados en 2026",
+      en: "16 courses completed in 2026",
+      gl: "16 cursos completados en 2026"
     },
     items: [
       {
@@ -376,6 +329,7 @@ const CERT_GROUPS = [
       { title: "Claude Code 101" },
       { title: "Claude Code in Action" },
       { title: "Claude Platform 101" },
+      { title: "Claude with Amazon Bedrock" },
       { title: "Introduction to Claude Cowork" },
       { title: "Introduction to MCP" },
       { title: { es: "MCP: Temas avanzados", en: "MCP: Advanced Topics" } },
@@ -447,7 +401,7 @@ const SKILLS = [
       { n: "Hugging Face", i: "huggingface" },
       { n: "XGBoost / LightGBM", i: "xgboost" },
       { n: { es: "NLP y minería de textos", en: "NLP & text mining", gl: "PLN e minaría de textos" }, i: null },
-      { n: { es: "Visión por computador", en: "Computer vision" }, i: "opencv" },
+      { n: { es: "Visión por computador", en: "Computer vision", gl: "Visión por computador" }, i: "opencv" },
       { n: { es: "Aprendizaje federado", en: "Federated learning", gl: "Aprendizaxe federada" }, i: null },
       { n: { es: "Series temporales", en: "Time series", gl: "Series temporais" }, i: null },
       { n: { es: "Sistemas recomendadores", en: "Recommender systems" }, i: null }
@@ -554,10 +508,10 @@ const SKILLS = [
 const LANGUAGES = [
   {
     n: { es: "Español / Gallego", en: "Spanish / Galician", gl: "Español / Galego" },
-    level: { es: "Nativo", en: "Native" },
+    level: { es: "Nativo", en: "Native", gl: "Nativo" },
     pct: 100
   },
-  { n: { es: "Inglés", en: "English" }, level: "C1", pct: 85 }
+  { n: { es: "Inglés", en: "English", gl: "Inglés" }, level: "C1", pct: 85 }
 ];
 
 /* ---------- Habilidades personales ---------- */
@@ -645,6 +599,7 @@ const INTERESTS = [
 
 /* ---------- Proyectos ----------
    image: ruta de la imagen o null · links: url real -> botón activo · null -> no se muestra
+   updated (opcional): fecha AAAA-MM-DD de la última mejora, para el sitemap
    blocks: h, h3, p, note, tiles, tabs, accordion, chipgroups, tech, people, kpis, fig */
 const PROJECTS = [
   {
@@ -666,7 +621,6 @@ const PROJECTS = [
       gl: "Dirixido por Verónica Bolón Canedo e Brais Cancela Barizo · Universidade da Coruña"
     },
     image: { es: "assets/proyectos/tfg/pipeline.jpg", en: "assets/proyectos/tfg/pipeline-en.jpg" },
-    fit: "contain",
     links: {
       demo: null,
       memoria: { es: "assets/TFG_memoria.pdf", en: "assets/TFG_memoria.pdf" },
@@ -908,7 +862,6 @@ const PROJECTS = [
       },
       {
         type: "tabs",
-        variant: "steps",
         items: [
           {
             t: { es: "Preparar", en: "Prepare", gl: "Preparar" },
@@ -1241,7 +1194,6 @@ const PROJECTS = [
       { type: "h3", t: { es: "Próximos pasos", en: "Next steps", gl: "Próximos pasos" } },
       {
         type: "tiles",
-        variant: "next",
         items: [
           {
             t: { es: "Más datos", en: "More data", gl: "Máis datos" },
@@ -1301,7 +1253,8 @@ const PROJECTS = [
   },
   {
     id: "bicicoruna",
-    date: { es: "2026", en: "2026" },
+    date: { es: "2026", en: "2026", gl: "2026" },
+    updated: "2026-11-08",
     title: {
       es: "PedalIA: predicción y operaciones para BiciCoruña",
       en: "PedalIA: forecasting and operations for BiciCoruña",
@@ -1326,7 +1279,15 @@ const PROJECTS = [
         t: {
           es: "<strong>PedalIA</strong> es un proyecto personal de principio a fin: recoge datos del sistema público de bicicletas de A Coruña, <strong>entrena modelos de aprendizaje automático</strong> con ellos y ofrece el resultado en una aplicación web pública. Responde a la pregunta que se hace cualquier usuario antes de salir de casa: <strong>¿habrá una bici (o un hueco para dejarla) cuando llegue?</strong>",
           en: "<strong>PedalIA</strong> is an end-to-end personal project: it collects data from A Coruña's public bike system, <strong>trains machine learning models</strong> on it and delivers the result in a public web app. It answers the question every user asks before leaving home: <strong>will there be a bike (or a free slot to leave it) when I get there?</strong>",
-          gl: "<strong>PedalIA</strong> é un proxecto persoal de principio a fin: recolle datos do sistema público de bicicletas da Coruña, <strong>adestra modelos de aprendizaxe automática</strong> con eles e ofrece o resultado nunha aplicación web pública. Responde á pregunta que se fai calquera usuario antes de saír de casa: <strong>haberá unha bici (ou un oco para deixala) cando chegue?</strong>"
+          gl: "<strong>PedalIA</strong> é un proxecto persoal de principio a fin: recolle datos do sistema público de bicicletas da Coruña, <strong>adestra modelos de aprendizaxe automática</strong> con eles e ofrece o resultado nunha aplicación web pública. Responde á pregunta que se fai calquera usuario antes de saír da casa: <strong>haberá unha bici (ou un oco para deixala) cando chegue?</strong>"
+        }
+      },
+      {
+        type: "note",
+        t: {
+          es: "Proyecto personal e independiente: PedalIA no está afiliado a BiciCoruña ni al Concello da Coruña, ni cuenta con su respaldo, y usa los datos públicos que ofrece el sistema. El repositorio y la demo conservan el nombre «BiciCoru».",
+          en: "Independent personal project: PedalIA is not affiliated with or endorsed by BiciCoruña or the A Coruña City Council, and it uses the public data the system provides. The repository and the demo keep the name “BiciCoru”.",
+          gl: "Proxecto persoal e independente: PedalIA non está afiliado a BiciCoruña nin ao Concello da Coruña, nin conta co seu apoio, e usa os datos públicos que ofrece o sistema. O repositorio e a demo conservan o nome «BiciCoru»."
         }
       },
       { type: "h", t: { es: "Por qué", en: "Why", gl: "Por que" } },
@@ -1397,7 +1358,6 @@ const PROJECTS = [
       },
       {
         type: "tabs",
-        variant: "steps",
         items: [
           {
             t: { es: "Recoger", en: "Collect", gl: "Recoller" },
@@ -1591,18 +1551,17 @@ const PROJECTS = [
               gl: "Todas as estacións coloreadas segundo a súa dispoñibilidade (verde: 5 ou máis bicis, laranxa: de 1 a 4, vermello: baleira), con buscador, filtros (favoritas, con bicis, con ocos) e xeolocalización. Arriba á dereita, o tempo e a ondada da Coruña."
             },
             img: "assets/proyectos/bicicoruna/mapa.jpg",
-            alt: { es: "Mapa interactivo de PedalIA", en: "PedalIA interactive map" }
+            alt: { es: "Mapa interactivo de PedalIA", en: "PedalIA interactive map", gl: "Mapa interactivo de PedalIA" }
           },
           {
             t: { es: "Ficha de estación", en: "Station card", gl: "Ficha de estación" },
-            side: true,
             d: {
               es: "Bicis y huecos libres en vivo, historial de ocupación de las últimas 24 horas y acceso a la <strong>predicción IA a 12 horas</strong>, a las rutas a pie o en bici y al reporte de incidencias (bici dañada, anclaje bloqueado, tótem, limpieza).",
               en: "Live bikes and free slots, occupancy history for the last 24 hours and access to the <strong>12-hour AI forecast</strong>, walking or cycling routes and incident reports (damaged bike, blocked dock, totem, cleanliness).",
               gl: "Bicis e ocos libres en vivo, historial de ocupación das últimas 24 horas e acceso á <strong>predición IA a 12 horas</strong>, ás rutas a pé ou en bici e ao reporte de incidencias (bici danada, ancoraxe bloqueada, tótem, limpeza)."
             },
             img: "assets/proyectos/bicicoruna/prediccion.jpg",
-            alt: { es: "Ficha de estación de PedalIA", en: "PedalIA station card" }
+            alt: { es: "Ficha de estación de PedalIA", en: "PedalIA station card", gl: "Ficha de estación de PedalIA" }
           },
           {
             t: { es: "Dashboard de red", en: "Network dashboard", gl: "Dashboard de rede" },
@@ -1612,7 +1571,7 @@ const PROJECTS = [
               gl: "Bicis dispoñibles, ocos libres, estacións activas e <strong>índice de saúde do sistema</strong>, coa distribución de dispoñibilidade e os rankings de estacións. Outras pestanas listan a ocupación por estación e as alertas de reequilibrio."
             },
             img: "assets/proyectos/bicicoruna/dashboard.jpg",
-            alt: { es: "Dashboard de la red", en: "Network dashboard" }
+            alt: { es: "Dashboard de la red", en: "Network dashboard", gl: "Dashboard da rede" }
           },
           {
             t: { es: "Rutas y altimetría", en: "Routes and elevation", gl: "Rutas e altimetría" },
@@ -1688,7 +1647,6 @@ const PROJECTS = [
       { type: "h3", t: { es: "Próximos pasos", en: "Next steps", gl: "Próximos pasos" } },
       {
         type: "tiles",
-        variant: "next",
         items: [
           {
             t: { es: "Error por estación", en: "Error per station", gl: "Erro por estación" },

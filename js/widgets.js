@@ -9,6 +9,8 @@ fetch(`https://api.open-meteo.com/v1/forecast?latitude=${CFG.lat}&longitude=${CF
 
 /* ---- Música ambiente (Web Audio, nunca autoplay: solo al pulsar Play) ---- */
 let actx, mgain, mOn = false;
+const muPaint = () => { $('#mu').textContent = t(mOn ? 'pause' : 'play'); $('#w-mu small').textContent = t('ambient'); };
+muPaint();
 $('#mu').addEventListener('click', () => {
   if (!actx) {
     actx = new (window.AudioContext || window.webkitAudioContext)(); mgain = actx.createGain(); mgain.gain.value = 0; mgain.connect(actx.destination);
@@ -16,7 +18,7 @@ $('#mu').addEventListener('click', () => {
   }
   mOn = !mOn; if (actx.state === 'suspended') actx.resume();
   mgain.gain.setTargetAtTime(mOn ? .8 : 0, actx.currentTime, .4);
-  $('#mu').textContent = mOn ? 'Pause' : 'Play'; $('#mu').setAttribute('aria-pressed', mOn);
+  muPaint(); $('#mu').setAttribute('aria-pressed', mOn);
 });
 
 /* ---- Último repositorio de GitHub (se guarda 1 h para no agotar el límite de la API; si falla, no se muestra nada) ---- */

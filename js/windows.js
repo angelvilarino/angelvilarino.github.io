@@ -75,12 +75,14 @@ function paintUI() {
   $('#thm').innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>`;
   $('#thm').setAttribute('aria-label', t('theme')); $('#lpb').innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg>`;
   $('#lpb').setAttribute('aria-label', 'Launchpad'); $('#wname').textContent = SITE.name; $('#wrole').textContent = U().role; $('#fcs').setAttribute('aria-label', t('focus')); $('#fcs').title = t('focus'); $('#lng').setAttribute('aria-label', t('lang')); $('#lps').placeholder = t('search'); $('#lps').setAttribute('aria-label', t('search'));
+  /* Textos accesibles que antes estaban fijos en inglés */
+  $('#lpx').setAttribute('aria-label', t('winclose')); $('#dock').setAttribute('aria-label', t('winlist'));
   const appBtn = (a, i) => `<button class="ic" type="button" data-go="${a[0]}" style="--i:${i}"><i>${ico(a[2])}</i>${t(a[0])}</button>`;
   $('#icons').innerHTML = APPS.filter(a => a[0] !== 'trash').map(appBtn).join(''); $('#trash').innerHTML = ico('trash'); $('#trash').setAttribute('aria-label', t('trash')); $('#trash').title = t('trash');
   $('#fab').textContent = t('lets'); $('#cta').textContent = t('copy'); $('#cli').href = SITE.linkedin; $('#cgh').href = SITE.github;
   $('#ctacv').textContent = t('cv'); $('#ctacv').href = SITE.cv[lang] || SITE.cv.es; $('#back').textContent = t('back'); $('#favail').textContent = t('avail');
   $('#f-apps').innerHTML = APPS.slice(0, 4).map(a => `<a href="${LBASE[lang]}#/${a[1]}" data-go="${a[0]}">${t(a[0])}</a>`).join('');
-  $('#f-soc').innerHTML = `<a href="${SITE.github}" target="_blank" rel="noopener">GitHub</a><a href="${SITE.linkedin}" target="_blank" rel="noopener">LinkedIn</a><button class="lnk" type="button" data-copy>${SITE.email}</button><a href="tel:${SITE.phoneLink}">${SITE.phone}</a><a href="${LBASE[lang]}cv/">${t('cvonline')}</a>`;
+  $('#f-soc').innerHTML = `<a href="${SITE.github}" target="_blank" rel="noopener">GitHub</a><a href="${SITE.linkedin}" target="_blank" rel="noopener">LinkedIn</a><button class="lnk" type="button" data-copy>${SITE.email}</button><a href="${LBASE[lang]}cv/">${t('cvonline')}</a>`;
   $('.legal').textContent = `© ${new Date().getFullYear()} ${SITE.name} · HTML, CSS, JS` + (SITE.analytics && SITE.analytics.goatcounter ? ' · ' + t('stats') : '');
   $('#wcity').textContent = CFG.city;
   /* widget de CV: descarga el PDF o abre el CV online */

@@ -13,6 +13,8 @@
    Genera: index.html, en/, gl/ · proyectos/<id>/ (y en/projects, gl/proxectos)
            cv/ (y en/cv, gl/cv) · sitemap.xml · 404.html · sw.js
            app.<huella>.js · style.<huella>.css · fonts.<huella>.css
+   Además lee el tamaño real de las imágenes de assets/ y se lo pasa a la web
+   (width/height en cada <img>) para que la página no "salte" al cargar.
    ===================================================================== */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -25,13 +27,26 @@ const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(ROOT, 'dist');
 const ORIGIN = 'https://angelvilarino.github.io';
 const LANGS = ['es', 'en', 'gl'];
-const BUILD_DATE = process.env.BUILD_DATE || new Date().toISOString().slice(0, 10);
 const JS_FILES = ['content.js', 'js/core.js', 'js/i18n.js', 'js/theme.js', 'js/views.js', 'js/windows.js', 'js/nav.js', 'js/widgets.js', 'js/fx.js', 'js/main.js'];
 const FONTS = [['space-grotesk', [500, 700]], ['jetbrains-mono', [400, 500]]];
 const PRELOAD_FONTS = ['space-grotesk-latin-500-normal.woff2', 'space-grotesk-latin-700-normal.woff2', 'jetbrains-mono-latin-400-normal.woff2'];
 
 let esbuild;
 try { esbuild = await import('esbuild'); } catch { console.error('\nFalta instalar las dependencias. Ejecuta primero:  npm install\n'); process.exit(1); }
+
+/* ---------- Metadatos por idioma (los de la home son los que ya tenías) ---------- */
+const HOME = {
+  es: { locale: 'es_ES', alt: 'en_US', title: 'Ángel Vilariño García | Data Scientist & Data Engineer', job: 'Científico e Ingeniero de Datos',
+    desc: 'Portfolio de Ángel Vilariño García: graduado en Ciencia e Ingeniería de Datos. Data science, data engineering, machine learning e IA generativa.',
+    ogDesc: 'Graduado en Ciencia e Ingeniería de Datos. Data engineering, machine learning e IA generativa.', ogAlt: 'Ángel Vilariño García, Científico e Ingeniero de Datos', og: 'assets/og-image-es.png', cv: 'Currículum' },
+  en: { locale: 'en_US', alt: 'es_ES', title: 'Ángel Vilariño García | Data Scientist & Data Engineer', job: 'Data Scientist & Data Engineer',
+    desc: 'Portfolio of Ángel Vilariño García: Data Science and Engineering graduate. Data science, data engineering, machine learning and generative AI.',
+    ogDesc: 'Data Science and Engineering graduate. Data engineering, machine learning and generative AI.', ogAlt: 'Ángel Vilariño García, Data Scientist & Data Engineer', og: 'assets/og-image-en.png', cv: 'Résumé' },
+  gl: { locale: 'gl_ES', alt: 'es_ES', title: 'Ángel Vilariño García | Científico e Enxeñeiro de Datos', job: 'Científico e Enxeñeiro de Datos',
+    desc: 'Portfolio de Ángel Vilariño García: graduado en Ciencia e Enxeñaría de Datos. Ciencia de datos, enxeñaría de datos, machine learning e IA xenerativa.',
+    ogDesc: 'Graduado en Ciencia e Enxeñaría de Datos. Enxeñaría de datos, machine learning e IA xenerativa.', ogAlt: 'Ángel Vilariño García, Científico e Enxeñeiro de Datos', og: 'assets/og-image-gl.png', cv: 'Currículo' }
+};
+const H1_HOME = 'Ángel Vilariño García · Data Scientist & Data Engineer';
 
 /* ---------- Utilidades ---------- */
 const hash = s => crypto.createHash('sha1').update(s).digest('hex').slice(0, 8);
@@ -52,19 +67,45 @@ function copyDir(src, dst) {
   return true;
 }
 
-/* ---------- Metadatos por idioma (los de la home son los que ya tenías) ---------- */
-const HOME = {
-  es: { locale: 'es_ES', alt: 'en_US', title: 'Ángel Vilariño García | Data Scientist & Data Engineer', job: 'Científico e Ingeniero de Datos',
-    desc: 'Portfolio de Ángel Vilariño García: graduado en Ciencia e Ingeniería de Datos. Data science, data engineering, machine learning e IA generativa.',
-    ogDesc: 'Graduado en Ciencia e Ingeniería de Datos. Data engineering, machine learning e IA generativa.', ogAlt: 'Ángel Vilariño García, Científico e Ingeniero de Datos', og: 'assets/og-image-es.png', cv: 'Currículum' },
-  en: { locale: 'en_US', alt: 'es_ES', title: 'Ángel Vilariño García | Data Scientist & Data Engineer', job: 'Data Scientist & Data Engineer',
-    desc: 'Portfolio of Ángel Vilariño García: Data Science and Engineering graduate. Data science, data engineering, machine learning and generative AI.',
-    ogDesc: 'Data Science and Engineering graduate. Data engineering, machine learning and generative AI.', ogAlt: 'Ángel Vilariño García, Data Scientist & Data Engineer', og: 'assets/og-image-en.png', cv: 'Résumé' },
-  gl: { locale: 'gl_ES', alt: 'es_ES', title: 'Ángel Vilariño García | Científico e Enxeñeiro de Datos', job: 'Científico e Enxeñeiro de Datos',
-    desc: 'Portfolio de Ángel Vilariño García: graduado en Ciencia e Enxeñaría de Datos. Ciencia de datos, enxeñaría de datos, machine learning e IA xenerativa.',
-    ogDesc: 'Graduado en Ciencia e Enxeñaría de Datos. Enxeñaría de datos, machine learning e IA xenerativa.', ogAlt: 'Ángel Vilariño García, Científico e Enxeñeiro de Datos', og: 'assets/og-image-gl.png', cv: 'Currículo' }
-};
-const H1_HOME = 'Ángel Vilariño García · Data Scientist & Data Engineer';
+/* ---------- Tamaño de las imágenes (PNG, JPEG y SVG, sin dependencias) ---------- */
+function imgSize(file) {
+  try {
+    const b = fs.readFileSync(file), ext = path.extname(file).toLowerCase();
+    if (ext === '.png' && b.length > 24 && b.toString('latin1', 1, 4) === 'PNG') return [b.readUInt32BE(16), b.readUInt32BE(20)];
+    if (ext === '.jpg' || ext === '.jpeg') {
+      let i = 2;
+      while (i + 9 < b.length) {
+        if (b[i] !== 0xFF) { i++; continue; }
+        const m = b[i + 1];
+        if (m === 0xFF) { i++; continue; }
+        if (m === 0xD8 || m === 0x01 || (m >= 0xD0 && m <= 0xD7)) { i += 2; continue; }
+        if (m >= 0xC0 && m <= 0xCF && m !== 0xC4 && m !== 0xC8 && m !== 0xCC) return [b.readUInt16BE(i + 7), b.readUInt16BE(i + 5)];
+        i += 2 + b.readUInt16BE(i + 2);
+      }
+    }
+    if (ext === '.svg') {
+      const tag = (b.toString('utf8', 0, 4096).match(/<svg\b[^>]*>/i) || [''])[0];
+      const n = k => { const m = tag.match(new RegExp('\\s' + k + '="\\s*([\\d.]+)(?:px)?\\s*"')); return m ? +m[1] : 0; };
+      let w = n('width'), h = n('height');
+      if (!w || !h) { const v = tag.match(/viewBox="\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)\s*"/i); if (v) { w = +v[1]; h = +v[2]; } }
+      if (w && h) return [w, h];
+    }
+  } catch (e) {}
+  return null;
+}
+/* { 'assets/proyectos/tfg/pipeline.jpg': [1600, 900], ... }  (sin logos, fuentes, certificados ni pdf.js) */
+function imageMap() {
+  const out = {}, root = path.join(ROOT, 'assets');
+  const walk = d => {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const f = path.join(d, e.name);
+      if (e.isDirectory()) { if (!['vendor', 'logos', 'fonts', 'certs'].includes(e.name)) walk(f); }
+      else if (/\.(png|jpe?g|svg)$/i.test(e.name)) { const s = imgSize(f); if (s && s[0] && s[1]) out['assets/' + path.relative(root, f).split(path.sep).join('/')] = s.map(Math.round); }
+    }
+  };
+  if (fs.existsSync(root)) walk(root);
+  return out;
+}
 
 /* ======================================================================
    CONSTRUCCIÓN
@@ -77,8 +118,8 @@ async function build() {
   const ctx = vm.createContext({ matchMedia: () => ({ matches: false }), addEventListener() {}, localStorage: { getItem: () => null, setItem() {} },
     navigator: { language: 'es' }, location: { pathname: '/', hash: '' }, document: {}, console });
   for (const f of ['content.js', 'js/core.js', 'js/i18n.js']) vm.runInContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), ctx, { filename: f });
-  const D = vm.runInContext('({ SITE, ABOUT, EXPERIENCE, EDUCATION, RECOGNITIONS, PROJECTS, SKILLS, CERT_GROUPS, LANGUAGES, SOFT_SKILLS, tx, txa, U, t, dt, projUrl, LBASE })', ctx);
-  const { SITE, ABOUT, EXPERIENCE, EDUCATION, RECOGNITIONS, PROJECTS, SKILLS, CERT_GROUPS, LANGUAGES, SOFT_SKILLS, tx, txa, U, t, dt, projUrl, LBASE } = D;
+  const D = vm.runInContext('({ SITE, ABOUT, EXPERIENCE, EDUCATION, RECOGNITIONS, PROJECTS, SKILLS, CERT_GROUPS, LANGUAGES, SOFT_SKILLS, tx, txa, U, t, dt, eduTag, projUrl, LBASE })', ctx);
+  const { SITE, ABOUT, EXPERIENCE, EDUCATION, RECOGNITIONS, PROJECTS, SKILLS, CERT_GROUPS, LANGUAGES, SOFT_SKILLS, tx, txa, U, t, dt, eduTag, projUrl, LBASE } = D;
   const setLang = l => vm.runInContext(`lang = ${JSON.stringify(l)}`, ctx);
 
   /* ---- recursos estáticos ---- */
@@ -102,7 +143,9 @@ async function build() {
   const FONTS_CSS = `fonts.${hash(fontCss)}.css`; write(FONTS_CSS, fontCss);
 
   /* ---- JS y CSS minificados con huella en el nombre ---- */
-  const jsSrc = JS_FILES.map(f => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('\n;\n');
+  const IMGS = imageMap();
+  const dimAttr = p => IMGS[p] ? ` width="${IMGS[p][0]}" height="${IMGS[p][1]}"` : '';
+  const jsSrc = `const IMGS=${JSON.stringify(IMGS)};\n;\n` + JS_FILES.map(f => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('\n;\n');
   const jsMin = esbuild.transformSync(jsSrc, { minify: true, target: 'es2019', legalComments: 'none' }).code;
   const APP_JS = `app.${hash(jsMin)}.js`; write(APP_JS, jsMin);
   const cssMin = esbuild.transformSync(fs.readFileSync(path.join(ROOT, 'css/style.css'), 'utf8'), { loader: 'css', minify: true }).code;
@@ -116,7 +159,7 @@ async function build() {
   /* ---- estadísticas (opcional) ---- */
   const gc = SITE.analytics && SITE.analytics.goatcounter ? String(SITE.analytics.goatcounter).trim() : '';
   const analytics = gc ? `<script data-goatcounter="https://${gc}.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>` : '';
-  const A = { APP_JS, STYLE_CSS, FONTS_CSS, analytics };
+  const A = { APP_JS, STYLE_CSS, FONTS_CSS, analytics, photoDim: dimAttr(SITE.photo) };
 
   /* ---- funciones que usan los datos de este build ---- */
   const a = (href, label) => `<a href="${esc(href)}">${label}</a>`;
@@ -157,7 +200,7 @@ async function build() {
       `<h2>${L.a_cert}</h2>`,
       CERT_GROUPS.map(g => `<h3>${eT(tx(g.title))}</h3><ul>${g.items.map(c => `<li>${eT(tx(c.title))}${c.meta ? ': ' + eT(tx(c.meta)) : ''}</li>`).join('')}</ul>`).join(''),
       `<h2>${L.s_contact}</h2>`,
-      `<ul><li>${a('mailto:' + SITE.email, SITE.email)}</li><li>${a('tel:' + SITE.phoneLink, SITE.phone)}</li><li>${a(SITE.linkedin, 'LinkedIn')}</li><li>${a(SITE.github, 'GitHub')}</li><li>${a(cvf, L.c_cv)}</li><li>${a(cvUrl(l), t('cvonline'))}</li></ul>`
+      `<ul><li>${a('mailto:' + SITE.email, SITE.email)}</li><li>${a(SITE.linkedin, 'LinkedIn')}</li><li>${a(SITE.github, 'GitHub')}</li><li>${a(cvf, L.c_cv)}</li><li>${a(cvUrl(l), t('cvonline'))}</li></ul>`
     ].join('\n');
   }
   function projectSeo(l, p) {
@@ -176,7 +219,7 @@ async function build() {
     const html = [
       sec(L.s_about, `<p>${tx(ABOUT.short)}</p>`),
       sec(L.a_exp, EXPERIENCE.map(e => item(eT(tx(e.org)), dt(e.dates), eT(tx(e.role)) + (e.place ? ' · ' + eT(tx(e.place)) : ''), `<ul>${txa(e.bullets).map(b => `<li>${b}</li>`).join('')}</ul>`)).join('')),
-      sec(L.a_edu, EDUCATION.map(e => item(eT(tx(e.org)), dt(e.dates) + (e.upcoming ? ' · ' + tx(e.upcoming) : ''), eT(tx(e.title)) + (e.place ? ' · ' + eT(tx(e.place)) : ''), e.detail ? `<p>${eT(tx(e.detail))}</p>` : '')).join('')),
+      sec(L.a_edu, EDUCATION.map(e => item(eT(tx(e.org)), dt(e.dates) + (eduTag(e) ? ' · ' + eduTag(e) : ''), eT(tx(e.title)) + (e.place ? ' · ' + eT(tx(e.place)) : ''), e.detail ? `<p>${eT(tx(e.detail))}</p>` : '')).join('')),
       sec(L.s_projects, PROJECTS.map(p => item(eT(tx(p.title)), tx(p.date), '', `<p>${eT(tx(p.short))}</p><p class="lk">${a(projUrl(l, p.id), eT(urlOf(projUrl(l, p.id)).replace('https://', '')))}${p.links.repo ? ' · ' + a(tx(p.links.repo), 'GitHub') : ''}${p.links.demo ? ' · ' + a(tx(p.links.demo), L.l_demo) : ''}</p>`)).join('')),
       sec(L.s_skills, `<dl>${SKILLS.map(g => `<dt>${eT(tx(g.title))}</dt><dd>${g.items.map(i => eT(tx(i.n))).join(' · ')}</dd>`).join('')}</dl>`),
       sec(L.a_cert, `<dl>${CERT_GROUPS.map(g => `<dt>${eT(tx(g.title))}</dt><dd>${g.items.map(c => eT(tx(c.title))).join(' · ')}</dd>`).join('')}</dl>`),
@@ -214,7 +257,7 @@ ${analytics}
     <h1>${SITE.name}</h1>
     <p class="role">${eT(M.job)}</p>
     <ul class="contact">
-      <li>${a('mailto:' + SITE.email, SITE.email)}</li><li>${a('tel:' + SITE.phoneLink, SITE.phone)}</li><li>${eT(L.tile_where)}</li>
+      <li>${a('mailto:' + SITE.email, SITE.email)}</li><li>${eT(L.tile_where)}</li>
       <li>${a(SITE.linkedin, 'LinkedIn')}</li><li>${a(SITE.github, 'GitHub')}</li>
     </ul>
   </header>
@@ -251,14 +294,17 @@ ${html}
     made.push(write(outDir(cvUrl(l)) + 'index.html', cvPage(l, M, alts(CV_HREFS))));
   }
 
-  /* ---- sitemap y 404 ---- */
-  const entry = (hrefs, l) => `<url><loc>${urlOf(hrefs[l])}</loc><lastmod>${BUILD_DATE}</lastmod>${[...LANGS.map(x => `<xhtml:link rel="alternate" hreflang="${x}" href="${urlOf(hrefs[x])}"/>`), `<xhtml:link rel="alternate" hreflang="x-default" href="${urlOf(hrefs.es)}"/>`].join('')}</url>`;
-  const sets = [LBASE, CV_HREFS, ...PROJECTS.map(p => Object.fromEntries(LANGS.map(x => [x, projUrl(x, p.id)])))];
-  write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sets.flatMap(h => LANGS.map(l => entry(h, l))).join('\n')}\n</urlset>\n`);
+  /* ---- sitemap y 404 ----
+     <lastmod> solo si hay una fecha real (SITE.updated para home y CV, project.updated para cada proyecto):
+     una fecha que cambia en cada build, aunque no cambie la página, hace que Google deje de fiarse de ella. */
+  const okDate = d => /^\d{4}-\d{2}-\d{2}$/.test(d || '') ? d : '';
+  const entry = (hrefs, l, d) => `<url><loc>${urlOf(hrefs[l])}</loc>${okDate(d) ? `<lastmod>${d}</lastmod>` : ''}${[...LANGS.map(x => `<xhtml:link rel="alternate" hreflang="${x}" href="${urlOf(hrefs[x])}"/>`), `<xhtml:link rel="alternate" hreflang="x-default" href="${urlOf(hrefs.es)}"/>`].join('')}</url>`;
+  const sets = [[LBASE, SITE.updated], [CV_HREFS, SITE.updated], ...PROJECTS.map(p => [Object.fromEntries(LANGS.map(x => [x, projUrl(x, p.id)])), p.updated])];
+  write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sets.flatMap(([h, d]) => LANGS.map(l => entry(h, l, d))).join('\n')}\n</urlset>\n`);
   write('404.html', notFound(SITE)); made.push('404.html');
 
   const size = f => (fs.statSync(path.join(DIST, f)).size / 1024).toFixed(1) + ' KB';
-  console.log(`✔ dist/ listo en ${Date.now() - t0} ms · ${made.length} páginas`);
+  console.log(`✔ dist/ listo en ${Date.now() - t0} ms · ${made.length} páginas · ${Object.keys(IMGS).length} imágenes medidas`);
   console.log(`  ${APP_JS} ${size(APP_JS)} (de ${(jsSrc.length / 1024).toFixed(0)} KB) · ${STYLE_CSS} ${size(STYLE_CSS)} · ${FONTS_CSS} ${size(FONTS_CSS)}`);
   console.log(gc ? `  Estadísticas: GoatCounter (${gc})` : '  Estadísticas: desactivadas (pon tu código en SITE.analytics.goatcounter de content.js)');
 }
@@ -275,7 +321,7 @@ function page(A, o) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <meta name="author" content="${SITE.name}">
-<meta name="theme-color" content="#d6381c" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f0e13" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#c8310f" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#0f0e13" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="${canonical}">
 <meta property="og:type" content="${ogType}"><meta property="og:site_name" content="${SITE.name}">
 <meta property="og:title" content="${esc(ogTitle)}">
@@ -311,7 +357,7 @@ ${A.analytics}
   <nav class="icons" id="icons"></nav>
   <button class="trash" id="trash" type="button" data-go="trash"></button>
   <div id="wins"></div>
-  <div id="wdg"><div class="wd me"><img src="assets/foto.jpg" alt="${SITE.name}"><i class="live" aria-hidden="true"></i></div><div class="wd" id="w-cv"><b>CV</b><div class="cvb"><a class="btn fill" id="bcv" href="#" download>PDF</a><a class="btn" id="bcvw" href="#"></a></div></div><div class="wd" id="w-clock"><b id="wc"></b><small id="wd-date"></small></div><div class="wd" id="w-wx"><b id="wt">--°</b><small id="wcity"></small></div><div class="wd" id="w-mu"><button type="button" id="mu" class="btn" aria-pressed="false">Play</button><small>Ambient</small></div><a class="wd" id="w-gh" href="${SITE.github}" target="_blank" rel="noopener"><small id="ghl">GitHub</small><b id="ghn">GitHub</b><small id="ghs"></small></a></div>
+  <div id="wdg"><div class="wd me"><img src="assets/foto.jpg"${A.photoDim} alt="${SITE.name}" decoding="async"><i class="live" aria-hidden="true"></i></div><div class="wd" id="w-cv"><b>CV</b><div class="cvb"><a class="btn fill" id="bcv" href="#" download>PDF</a><a class="btn" id="bcvw" href="#"></a></div></div><div class="wd" id="w-clock"><b id="wc"></b><small id="wd-date"></small></div><div class="wd" id="w-wx"><b id="wt">--°</b><small id="wcity"></small></div><div class="wd" id="w-mu"><button type="button" id="mu" class="btn" aria-pressed="false"></button><small></small></div><a class="wd" id="w-gh" href="${SITE.github}" target="_blank" rel="noopener"><small id="ghl">GitHub</small><b id="ghn">GitHub</b><small id="ghs"></small></a></div>
   <nav class="dock" id="dock" aria-label="Windows"></nav>
   <a class="fab mag" id="fab" href="#end"></a>
 </main>
@@ -344,24 +390,24 @@ ${seo}
 
 /* ---------- Estilos de la página /cv/ ---------- */
 const CV_CSS = `
-:root{color-scheme:light dark;--bg:#ece9e3;--paper:#fff;--tx:#16151a;--mu:#5d5a66;--ln:#dcd8d0;--ac:#d6381c}
+:root{color-scheme:light dark;--bg:#ece9e3;--paper:#fff;--tx:#16151a;--mu:#5d5a66;--ln:#dcd8d0;--ac:#c8310f}
 @media(prefers-color-scheme:dark){:root{--bg:#0f0e13;--paper:#1a1920;--tx:#f3f0ea;--mu:#a8a4b3;--ln:#33313c;--ac:#ff7a59}}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 "Space Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:var(--ac)}a:focus-visible,button:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 .top{max-width:860px;margin:0 auto;padding:16px 12px 0;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:.9rem}
-.top a{text-decoration:none;font-weight:600}.langs{display:flex;gap:4px}.langs a{padding:3px 9px;border:1px solid var(--ln);border-radius:99px;font:500 .78rem "JetBrains Mono",monospace;color:var(--mu)}.langs a[aria-current]{background:var(--tx);color:var(--paper);border-color:var(--tx)}
+.top a{text-decoration:none;font-weight:600}.langs{display:flex;gap:4px}.langs a{padding:3px 9px;border:1px solid var(--ln);border-radius:99px;font:500 .82rem "JetBrains Mono",monospace;color:var(--mu)}.langs a[aria-current]{background:var(--tx);color:var(--paper);border-color:var(--tx)}
 .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
 .btn{display:inline-block;padding:7px 16px;border:1.5px solid var(--ac);border-radius:999px;background:transparent;color:var(--ac);font:700 .85rem "Space Grotesk",sans-serif;text-decoration:none;cursor:pointer}.btn.fill,.btn:hover{background:var(--ac);color:#fff}
 .paper{max-width:860px;margin:14px auto 48px;padding:44px 48px;background:var(--paper);border:1px solid var(--ln);border-radius:14px;box-shadow:0 20px 50px -30px #0006}
 header{border-bottom:3px solid var(--ac);padding-bottom:16px;margin-bottom:6px}
 h1{margin:0;font-size:2.4rem;line-height:1.05;letter-spacing:-.03em}.role{margin:6px 0 10px;font-size:1.15rem;color:var(--ac);font-weight:700}
-.contact{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0;padding:0;list-style:none;font:.85rem "JetBrains Mono",monospace;color:var(--mu)}.contact a{color:inherit}
+.contact{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0;padding:0;list-style:none;font:.88rem "JetBrains Mono",monospace;color:var(--mu)}.contact a{color:inherit}
 section{margin-top:22px}h2{margin:0 0 8px;padding-bottom:4px;border-bottom:1px solid var(--ln);font-size:.95rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ac)}
-article{margin:0 0 12px}h3{display:flex;justify-content:space-between;gap:12px;margin:0;font-size:1.05rem}.when{font:.8rem "JetBrains Mono",monospace;color:var(--mu);white-space:nowrap;font-weight:400}
+article{margin:0 0 12px}h3{display:flex;justify-content:space-between;gap:12px;margin:0;font-size:1.05rem}.when{font:.85rem "JetBrains Mono",monospace;color:var(--mu);white-space:nowrap;font-weight:400}
 .sub{margin:0 0 4px;color:var(--mu);font-size:.92rem}p{margin:0 0 .5em}ul{margin:.3em 0 0;padding-left:1.15em}li{margin:.15em 0}
 dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:3px 16px;font-size:.92rem}dt{font-weight:700}dd{margin:0;color:var(--mu)}
-.lk{font-size:.85rem}.lk a{word-break:break-all}
+.lk{font-size:.88rem}.lk a{word-break:break-all}
 @media(max-width:640px){.paper{padding:26px 20px;margin:10px 8px 32px}h1{font-size:1.9rem}dl{grid-template-columns:1fr}dd{margin-bottom:6px}h3{flex-direction:column;gap:0}}
 @media print{
  @page{size:A4;margin:12mm}
@@ -381,7 +427,7 @@ function notFound(SITE) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>404 | ${SITE.name}</title>
-<style>:root{color-scheme:light dark;--bg:#f4f1ec;--tx:#16151a;--ac:#d6381c}@media(prefers-color-scheme:dark){:root{--bg:#0f0e13;--tx:#f3f0ea;--ac:#ff7a59}}
+<style>:root{color-scheme:light dark;--bg:#f4f1ec;--tx:#16151a;--ac:#c8310f}@media(prefers-color-scheme:dark){:root{--bg:#0f0e13;--tx:#f3f0ea;--ac:#ff7a59}}
 body{margin:0;min-height:100vh;display:grid;place-content:center;gap:14px;padding:24px;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif}
 h1{margin:0;font-size:clamp(3rem,12vw,7rem);letter-spacing:-.04em;color:var(--ac)}p{margin:0}a{color:var(--ac);font-weight:700}nav{display:flex;gap:18px;flex-wrap:wrap}</style>
 </head>

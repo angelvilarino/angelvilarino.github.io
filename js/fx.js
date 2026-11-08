@@ -41,7 +41,7 @@ document.addEventListener('keydown', e => {
 
 /* ---- Visor de imágenes (capturas y figuras de los proyectos) ---- */
 const lb = document.createElement('div'); lb.id = 'lb'; lb.hidden = true; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true');
-lb.innerHTML = '<img alt=""><button type="button" aria-label="Close">×</button>'; document.body.appendChild(lb);
+lb.innerHTML = `<img alt=""><button type="button" aria-label="${t('winclose')}">×</button>`; document.body.appendChild(lb);
 document.addEventListener('click', e => {
   const im = e.target.closest('.detail figure img, .tp img, .ph img');
   if (im) { const x = $('img', lb); x.src = im.currentSrc || im.src; x.alt = im.alt; lb.hidden = false; $('button', lb).focus(); return; }
