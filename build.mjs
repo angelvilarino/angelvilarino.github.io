@@ -5,7 +5,7 @@
      npm install        (una sola vez)
      npm run build      genera dist/
      npm run dev        genera dist/, la sirve en http://localhost:8123 y
-                        se reconstruye sola al guardar content.js, js/ o css/
+                        se reconstruye sola al guardar content.js, js/, css/ o assets/
 
    En GitHub, el workflow .github/workflows/deploy.yml hace esto mismo
    y publica dist/ en GitHub Pages cada vez que haces push.
@@ -483,7 +483,7 @@ if (process.argv.includes('--serve')) {
     r.setHeader('content-type', TYPES[path.extname(f).toLowerCase()] || 'application/octet-stream'); r.setHeader('cache-control', 'no-store'); r.end(fs.readFileSync(f));
   }).listen(PORT, () => console.log(`\n  → http://localhost:${PORT}/   (Ctrl+C para parar; se reconstruye al guardar)\n`));
   let timer = 0;
-  for (const w of ['content.js', 'js', 'css']) {
-    try { fs.watch(path.join(ROOT, w), () => { clearTimeout(timer); timer = setTimeout(() => build().catch(e => console.error('✖', e.message)), 250); }); } catch {}
+  for (const w of ['content.js', 'js', 'css', 'assets']) {
+    try { fs.watch(path.join(ROOT, w), { recursive: true }, () => { clearTimeout(timer); timer = setTimeout(() => build().catch(e => console.error('✖', e.message)), 250); }); } catch {}
   }
 }

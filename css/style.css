@@ -101,7 +101,7 @@ input,textarea{width:100%;padding:11px 14px;border:1px solid var(--ln);border-ra
 .tp{margin:0 0 14px}.tp img{margin-top:10px;border-radius:12px;background:var(--paper);max-height:380px;object-fit:contain}
 .acc{display:grid;gap:8px;margin:10px 0 16px}.acc details{border:1px solid var(--ln);border-radius:14px;background:var(--bg);padding:10px 14px}.acc summary{cursor:pointer;font-weight:700}.acc p{margin:8px 0 0;color:var(--mu)}
 .chp{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px;padding:0;list-style:none}.chp li{padding:3px 12px;border:1px solid var(--ln);border-radius:99px;font-size:.85rem;background:var(--bg)}
-#w-mu .btn{padding:6px 18px}
+#w-mu .btn{padding:6px 18px;margin-right:8px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* v3: idioma desplegable, foto, bienvenida, adaptación a pantalla completa */
@@ -209,7 +209,7 @@ a.wd{display:block;text-decoration:none;color:inherit;cursor:pointer}a.wd:hover{
 #lngm button:focus-visible{outline-offset:-2px}
 
 /* Contacto: tarjetas con icono */
-.ct{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:14px}
+.ct{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
 .cc{position:relative;display:flex;align-items:center;gap:16px;min-width:0;padding:18px;border:1px solid var(--ln);border-top:4px solid var(--c,var(--ln));border-radius:16px;background:var(--bg);color:inherit;text-decoration:none;transition:translate .2s,box-shadow .2s}
 a.cc{cursor:pointer}a.cc:hover{translate:0 -3px;box-shadow:0 14px 28px -16px #0007}
 .cc.mail{grid-column:1/-1;padding:22px}
@@ -220,6 +220,7 @@ a.cc{cursor:pointer}a.cc:hover{translate:0 -3px;box-shadow:0 14px 28px -16px #00
 .go{flex:none;color:var(--mu);transition:translate .2s,color .2s}.go svg{width:18px;height:18px}a.cc:hover .go{color:var(--tx);translate:2px -2px}
 .cc .row{margin-top:8px}.cc.mail .row{margin-top:0}
 .cc .btn{display:inline-flex;align-items:center;gap:6px}.cc .btn svg{width:16px;height:16px;flex:none}
+@media(max-width:560px){.ct{grid-template-columns:1fr}}
 @media(max-width:480px){.ci{width:40px;height:40px}.ci svg{width:20px;height:20px}.cc{gap:12px;padding:14px}.cc.mail{padding:16px}}
 
 /* Modo oscuro: capturas y diagramas sin deslumbrar (el fondo es un blanco roto y se atenúa un poco la imagen) */

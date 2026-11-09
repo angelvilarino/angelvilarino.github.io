@@ -297,9 +297,37 @@ const CERT_GROUPS = [
     title: { es: "IA generativa y agentes", en: "Generative AI & agents", gl: "IA xenerativa e axentes" },
     cols: true,
     items: [
-      { title: "Hugging Face AI Agents Course", meta: "Hugging Face", logo: "assets/logos/huggingface.svg" },
-      { title: "Oracle Agentic AI Foundations", meta: "Oracle", logo: "assets/logos/oracle.svg" },
-      { title: "AWS: Foundations of Prompt Engineering", meta: "AWS", logo: "assets/logos/aws.svg" }
+      {
+        title: "Oracle Certified Foundations Associate: Agentic AI",
+        featured: true,
+        meta: {
+          es: "Oracle University. Agentic AI Certified Foundations Associate. Obtenida el 28 de octubre de 2026; válida hasta el 28 de octubre de 2028.",
+          en: "Oracle University. Agentic AI Certified Foundations Associate. Earned on 28 October 2026; valid until 28 October 2028.",
+          gl: "Oracle University. Agentic AI Certified Foundations Associate. Obtida o 28 de outubro de 2026; válida ata o 28 de outubro de 2028."
+        },
+        logo: "assets/logos/oracle.svg",
+        file: "assets/certs/Oracle-AgenticAI.pdf"
+      },
+      {
+        title: "Hugging Face AI Agents Course",
+        meta: {
+          es: "Hugging Face. Certificado de excelencia. 5 de noviembre de 2026.",
+          en: "Hugging Face. Certificate of Excellence. 5 November 2026.",
+          gl: "Hugging Face. Certificado de excelencia. 5 de novembro de 2026."
+        },
+        logo: "assets/logos/huggingface.svg",
+        file: "assets/certs/HuggingFace-AIAgents.pdf"
+      },
+      {
+        title: "AWS: Foundations of Prompt Engineering",
+        meta: {
+          es: "AWS Training & Certification. Certificado de finalización. 25 de octubre de 2026.",
+          en: "AWS Training & Certification. Completion certificate. 25 October 2026.",
+          gl: "AWS Training & Certification. Certificado de finalización. 25 de outubro de 2026."
+        },
+        logo: "assets/logos/aws.svg",
+        file: "assets/certs/AWS-PromptEngineering.pdf"
+      }
     ]
   },
   {

@@ -68,10 +68,11 @@ function thumbFallback(cv, a, err) {
     a.classList.add('emb'); if (r > 1) a.classList.add('land'); a.style.aspectRatio = String(r); cv.replaceWith(f);
   });
 }
+/* getDocument({ url }) y no getDocument("url"): pdf.js 6 ya no acepta la cadena suelta y las miniaturas caían al respaldo */
 function thumbs(root) {
   $$('canvas[data-pdf]', root).forEach(cv => {
     if (cv.dataset.done) return; cv.dataset.done = 1; const a = cv.parentNode;
-    pdfjs().then(m => m.getDocument(new URL(cv.dataset.pdf, document.baseURI).href).promise).then(d => d.getPage(1)).then(p => {
+    pdfjs().then(m => m.getDocument({ url: new URL(cv.dataset.pdf, document.baseURI).href }).promise).then(d => d.getPage(1)).then(p => {
       const v0 = p.getViewport({ scale: 1 }), v = p.getViewport({ scale: 420 / v0.width });
       cv.width = v.width; cv.height = v.height; if (v0.width > v0.height) a.classList.add('land');
       return p.render({ canvasContext: cv.getContext('2d'), viewport: v }).promise;
