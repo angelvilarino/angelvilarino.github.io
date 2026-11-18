@@ -1,0 +1,190 @@
+/* Ángel OS · v14 «Profundidad»
+   Se añade DESPUÉS de style.css (build.mjs lo concatena). Todo lo de aquí se apoya en los tokens existentes
+   (--ac, --a2, --sf, --ln...) y añade --a3 (violeta sutil), --spring y --hl (brillo especular del vidrio). */
+@property --p{syntax:'<number>';inherits:false;initial-value:0}
+:root{--a3:#6a4cf0;--spring:cubic-bezier(.22,1.15,.36,1);--ease:cubic-bezier(.2,.8,.2,1);--hl:rgba(255,255,255,1);--hl2:rgba(255,255,255,.75);--hl3:rgba(255,255,255,.3)}
+[data-theme=dark]{--a3:#9d86ff;--hl:rgba(255,255,255,.55);--hl2:rgba(255,255,255,.3);--hl3:rgba(255,255,255,.08)}
+.prog{background:linear-gradient(90deg,var(--c1),var(--a3),var(--c2))}
+
+/* ============ 1 · Arranque cinematográfico ============ */
+#boot{background:radial-gradient(65% 55% at 50% 42%,#221838 0,#0f0e13 62%);overflow:hidden;gap:22px;transition:opacity .5s ease,scale .6s var(--ease),filter .5s ease}
+#boot.off{opacity:0;scale:1.08;filter:blur(14px)}
+#boot::before{content:"";position:absolute;left:50%;top:44%;width:min(80vmin,720px);aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:conic-gradient(from 90deg,#ff7a59,#7a5cff,#3ee0c8,#ff7a59);filter:blur(70px);opacity:0;animation:bootGlow 1.8s ease-out .1s forwards,bootSpin 8s linear infinite}
+#boot b{position:relative;order:1;padding:0 .14em;font-size:clamp(4rem,15vmin,7.5rem);line-height:1;letter-spacing:-.06em;background:linear-gradient(105deg,transparent 38%,#ff7a59 48%,#3ee0c8 56%,transparent 66%) 120% 0/300% 100% no-repeat,linear-gradient(#f3f0ea,#f3f0ea);-webkit-background-clip:text;background-clip:text;color:transparent;animation:bootLogo 1.1s var(--ease) both,bootSheen 1.7s .35s ease-in-out both}
+#boot::after{content:"Ángel OS";order:2;font:500 .78rem var(--m);letter-spacing:.55em;text-transform:uppercase;color:#a8a4b3;opacity:0;animation:bootTag .9s .55s var(--ease) both}
+#boot i{order:3;width:min(220px,50vw)}
+#boot u{background:linear-gradient(90deg,#ff7a59,#7a5cff,#3ee0c8);box-shadow:0 0 12px #ff7a5999}
+@keyframes bootGlow{0%{opacity:0;scale:.5}60%{opacity:.5}100%{opacity:.34;scale:1}}
+@keyframes bootSpin{to{rotate:360deg}}
+@keyframes bootLogo{from{opacity:0;scale:.78;filter:blur(18px)}to{opacity:1;scale:1;filter:blur(0)}}
+@keyframes bootSheen{from{background-position:120% 0,0 0}to{background-position:-20% 0,0 0}}
+@keyframes bootTag{from{opacity:0;translate:0 10px;letter-spacing:.9em}to{opacity:.9;translate:0 0;letter-spacing:.55em}}
+
+/* Revelado en cascada del escritorio al terminar el arranque:
+   rvw = estado oculto · rv1 = transiciones con retardo escalonado · fx-on = ya en marcha */
+html.rvw .bar{translate:0 -160%;opacity:0}
+html.rvw .icons .ic{opacity:0;translate:0 26px;scale:.88}
+html.rvw #wdg .wd{opacity:0;translate:28px 0;scale:.94}
+html.rvw .dock{opacity:0;translate:-50% 70px}
+html.rvw #wins{opacity:0}
+html.rvw .trash,html.rvw .fab{opacity:0;translate:0 20px}
+html.rv1 .bar{transition:scale .3s,padding .3s,translate .9s var(--spring),opacity .6s}
+html.rv1 .icons .ic{transition:translate .8s var(--spring),opacity .5s,scale .8s var(--spring);transition-delay:calc(var(--i,0)*50ms + 300ms)}
+html.rv1 #wdg .wd{transition:translate .8s var(--spring),opacity .6s,scale .8s var(--spring);transition-delay:calc(var(--n,0)*90ms + 450ms)}
+html.rv1 .dock{transition:translate 1s var(--spring) .7s,opacity .6s .7s}
+html.rv1 #wins{transition:opacity .8s .55s}
+html.rv1 .trash,html.rv1 .fab{transition:translate .8s var(--spring) .9s,opacity .6s .9s}
+#wdg .wd:nth-child(2){--n:1}#wdg .wd:nth-child(3){--n:2}#wdg .wd:nth-child(4){--n:3}#wdg .wd:nth-child(5){--n:4}#wdg .wd:nth-child(6){--n:5}
+
+/* ============ 2 · Fondo líquido (shader) y textura ============ */
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.4s ease;scale:1.06;translate:calc(var(--px,0)*-16px) calc(var(--py,0)*-10px)}
+html.gl #gl{opacity:1}
+html.gl .wall::before{opacity:0;animation:none;transition:opacity 1.2s}
+.wall::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.08;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.desk::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 95% at 50% 40%,transparent 58%,rgba(0,0,0,.16) 100%)}
+.icons{translate:calc(var(--px,0)*-5px) calc(var(--py,0)*-4px)}
+
+/* ============ 3 · Vidrio: brillo especular que sigue al cursor + sombras por capas ============ */
+.cell{position:relative;overflow:hidden}
+.cell>*{position:relative}
+.card::after,.cc::after,.cell::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;background:radial-gradient(220px circle at var(--lx,50%) var(--ly,0%),var(--hl),transparent 65%),linear-gradient(135deg,var(--hl2),transparent 28%,transparent 72%,var(--hl3));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;opacity:.5;transition:opacity .3s}
+.card:hover::after,.cc:hover::after,.cell:hover::after{opacity:1}
+.cell::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(260px circle at var(--lx,50%) var(--ly,50%),color-mix(in srgb,var(--ac) 15%,transparent),transparent 70%);opacity:0;transition:opacity .3s}
+.cell:hover::before{opacity:1}
+/* el desenfoque de las ventanas se queda como en style.css (cambiarlo o animarlo encima del shader provoca parpadeo) */
+.win{
+  box-shadow:inset 0 1px 0 var(--hl3),0 0 0 .5px var(--ln),0 1px 1px rgba(0,0,0,.06),0 2px 4px rgba(0,0,0,.05),0 8px 16px -4px rgba(0,0,0,.12),0 24px 48px -12px rgba(0,0,0,.22),0 48px 96px -24px rgba(0,0,0,.3);
+  transition:scale .55s var(--ease),opacity .35s,transform .55s var(--spring),box-shadow .35s}
+.win:not(.act){box-shadow:inset 0 1px 0 var(--hl3),0 0 0 .5px var(--ln),0 1px 1px rgba(0,0,0,.05),0 4px 10px -4px rgba(0,0,0,.12),0 16px 32px -12px rgba(0,0,0,.18)}
+.win.out{transition:.2s}
+.tb{background:linear-gradient(180deg,color-mix(in srgb,var(--hl) 9%,transparent),transparent)}
+.dock{align-items:flex-end;gap:6px;padding:6px 8px;border-radius:22px;box-shadow:0 18px 40px -14px rgba(0,0,0,.45),inset 0 1px 0 var(--hl3)}
+.bar{box-shadow:inset 0 1px 0 var(--hl3)}
+.wd{box-shadow:0 14px 30px -18px rgba(0,0,0,.4),inset 0 1px 0 var(--hl3)}
+
+/* ============ 4 · Ventanas: genie, inclinación, snap ============ */
+@media(min-width:1025px){
+ .win.min{scale:.1 .04;opacity:0;visibility:hidden;pointer-events:none;transition:scale .5s cubic-bezier(.5,0,.8,.4),opacity .32s .12s,visibility 0s .5s,transform .3s,box-shadow .3s}
+}
+@keyframes genieIn{0%{scale:.08 .03;opacity:0}45%{opacity:1}72%{scale:1.02 1.02}100%{scale:1 1;opacity:1}}
+.win.gin{animation:genieIn .62s cubic-bezier(.22,.9,.28,1) both}
+.win.tilting{transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));box-shadow:0 0 0 .5px var(--ln),0 30px 60px -16px rgba(0,0,0,.35),0 70px 120px -30px rgba(0,0,0,.4)}
+.win.tilting .tb{cursor:grabbing}
+.win.snapping{transition:translate .38s var(--spring),width .38s var(--spring),height .38s var(--spring),scale .55s var(--ease),opacity .35s,box-shadow .35s}
+#snap{position:absolute;z-index:9;border-radius:18px;border:1.5px solid color-mix(in srgb,var(--ac) 70%,transparent);background:color-mix(in srgb,var(--ac) 12%,transparent);backdrop-filter:blur(6px);pointer-events:none;opacity:0;scale:.98;transition:left .25s var(--spring),top .25s var(--spring),width .25s var(--spring),height .25s var(--spring),opacity .2s,scale .25s}
+#snap.on{opacity:1;scale:1}
+
+/* ============ 5 · Dock con magnificación ============ */
+.dock button{--s:1;flex:none;width:calc(44px*var(--s));height:calc(44px*var(--s));transition:width .25s var(--spring),height .25s var(--spring),background .2s,color .2s}
+.dock.hov button{transition:background .2s,color .2s}
+.dock button svg{width:calc(22px*var(--s));height:calc(22px*var(--s))}
+.dock button::after{content:attr(data-tip);position:absolute;bottom:calc(100% + .9em);left:50%;translate:-50% 4px;padding:.35em .8em;border-radius:.6em;background:var(--tx);color:var(--bg);font:600 calc(.74rem / var(--s,1)) var(--d);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s,translate .15s}
+.dock button:hover::after,.dock button:focus-visible::after{opacity:1;translate:-50% 0}
+.dock button.open::before{content:"";position:absolute;left:50%;bottom:-5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--tx);opacity:.65}
+.dock button.on::before{background:var(--ac);opacity:1;box-shadow:0 0 6px var(--ac)}
+.dock button.bn{animation:bn .6s var(--ease)}
+@keyframes bn{40%{transform:translateY(-16px)}}
+.dock .sep{display:block;width:1px;align-self:stretch;margin:4px 2px;background:var(--ln)}
+
+/* ============ 6 · Cierre: telón, nombre interactivo, brillo ============ */
+html.closing .desk{transform-origin:50% 100%}
+#dim{position:absolute;inset:0;z-index:40;pointer-events:none;background:#05040a;opacity:0}
+.end::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(520px circle at var(--ex,50%) var(--ey,40%),color-mix(in srgb,var(--ac) 16%,transparent),transparent 70%),radial-gradient(800px circle at 15% 90%,color-mix(in srgb,var(--a2) 14%,transparent),transparent 70%),radial-gradient(700px circle at 90% 10%,color-mix(in srgb,var(--a3) 14%,transparent),transparent 70%)}
+.end-in{position:relative;z-index:1}
+.name.lt{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:inherit}
+.name.lt .w{display:inline-block;white-space:nowrap}
+.name.lt .nl{display:inline-block;color:color-mix(in srgb,var(--ac) calc(var(--p)*100%),color-mix(in srgb,var(--tx) 24%,transparent));translate:0 calc(var(--p)*-.07em);scale:calc(1 + var(--p)*.06);text-shadow:0 0 calc(var(--p)*.35em) color-mix(in srgb,var(--ac) 55%,transparent);transition:color .3s,translate .35s var(--spring),scale .35s var(--spring),text-shadow .3s}
+@media(hover:none){.name.lt .nl{animation:lw 5.5s ease-in-out infinite;animation-delay:calc(var(--k,0)*-.32s)}}
+@keyframes lw{0%,100%{--p:0}45%{--p:.7}}
+
+/* ============ 7 · Páginas de proyecto ============ */
+.dh{position:relative;overflow:hidden;isolation:isolate;margin:2px 0 18px;padding:clamp(18px,3vw,32px);border-radius:24px;border:1px solid var(--ln);background:color-mix(in srgb,var(--bg) 82%,transparent)}
+.dh-bg{position:absolute;inset:-20% -10%;z-index:-1;background:radial-gradient(40% 50% at 15% 25%,color-mix(in srgb,var(--c1) 38%,transparent),transparent 70%),radial-gradient(36% 46% at 85% 20%,color-mix(in srgb,var(--c2) 34%,transparent),transparent 70%),radial-gradient(40% 50% at 60% 100%,color-mix(in srgb,var(--a3) 30%,transparent),transparent 70%);translate:0 calc(var(--sy,0)*-.12px)}
+.dh-tx{translate:0 calc(var(--sy,0)*.28px);opacity:max(0,calc(1 - var(--sy,0)*.0032))}
+.dh-k{display:block;font:500 .82rem var(--m);color:var(--mu)}
+.dh-t{margin:6px 0 10px;font:700 clamp(1.7rem,3.8vw,2.9rem)/1.04 var(--d);letter-spacing:-.035em}
+.dh-s{font-size:1.04rem;max-width:62ch}
+.dh-fig{margin-top:16px;perspective:900px;translate:0 calc(var(--sy,0)*.1px)}
+.dh-fig .hero{margin:0;max-height:320px;transform:rotateX(var(--rx2,0deg)) rotateY(var(--ry2,0deg));transition:transform .35s var(--spring);box-shadow:0 30px 60px -28px rgba(0,0,0,.55),0 8px 18px -10px rgba(0,0,0,.35)}
+.detail .sh{scroll-margin-top:70px}
+.toc{position:sticky;top:0;z-index:5;margin:0 0 6px;border-radius:16px;border:1px solid var(--ln);background:color-mix(in srgb,var(--bg) 78%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);overflow:hidden}
+.toc-p{height:3px;background:var(--ln)}
+.toc-p u{display:block;height:100%;background:linear-gradient(90deg,var(--c1),var(--a3),var(--c2));transform-origin:left;transform:scaleX(0);transition:transform .15s linear}
+.toc-l{position:relative;display:flex;gap:4px;padding:6px;overflow-x:auto;scrollbar-width:none}
+.toc-l::-webkit-scrollbar{display:none}
+.toc-l button{flex:none;display:flex;align-items:center;gap:7px;padding:6px 12px 6px 6px;border:0;border-radius:99px;background:transparent;font:600 .82rem var(--d);color:var(--mu);white-space:nowrap;cursor:pointer;transition:background .2s,color .2s}
+.toc-l button b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ln);font:600 .72rem var(--m);color:var(--tx)}
+.toc-l button.on{background:var(--tx);color:var(--bg)}
+.toc-l button.on b{background:var(--ac);color:var(--ack)}
+.detail .rvl{opacity:0;translate:0 22px;transition:opacity .7s var(--ease),translate .8s var(--spring)}
+.detail .rvl.in{opacity:1;translate:0 0}
+.tl.rk{display:grid;grid-template-columns:auto 1fr;column-gap:14px;align-items:center}
+.tl.rk>.rg{grid-row:1/3;grid-column:1;width:64px;height:64px}
+.tl.rk>b{grid-column:2;align-self:end}
+.tl.rk>p{grid-column:2;align-self:start;margin-top:2px}
+.rg-t{fill:none;stroke:var(--ln);stroke-width:6}
+.rg-v{fill:none;stroke:var(--c,var(--ac));stroke-width:6;stroke-linecap:round;stroke-dasharray:var(--len);stroke-dashoffset:var(--len);transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.4s var(--ease) .15s;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--c,var(--ac)) 55%,transparent))}
+.tl.rk.rin .rg-v{stroke-dashoffset:var(--off)}
+.sp{display:block;width:100%;height:34px;margin-top:8px;overflow:hidden;clip-path:inset(0 100% 0 0);transition:clip-path 1.5s var(--ease) .2s}
+.tl.rin .sp{clip-path:inset(0 0 0 0)}
+.sp-a{fill:color-mix(in srgb,var(--c,var(--ac)) 16%,transparent);stroke:none}
+.sp-l{fill:none;stroke:var(--c,var(--ac));stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+i.sbar u{background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 55%,var(--a3)))}
+
+/* ============ 8 · Visor de imágenes (galería, zoom, gestos) ============ */
+#vw{position:fixed;inset:0;z-index:260;touch-action:none;-webkit-user-select:none;user-select:none}
+#vw .vw-bg{position:absolute;inset:0;background:rgba(6,5,10,.86);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);animation:fi .25s}
+#vw .vw-st{position:absolute;inset:56px 0 96px;margin:0;display:grid;place-items:center;overflow:hidden;cursor:zoom-in}
+#vw .vw-st.z{cursor:grab}
+#vw img{max-width:92%;max-height:100%;border-radius:12px;background:var(--paper);transform:translate(var(--vx,0px),var(--vy,0px)) scale(var(--vs,1));will-change:transform;box-shadow:0 30px 80px -20px #000a}
+#vw img.anim{transition:transform .28s var(--ease)}
+#vw img.sw{animation:vwIn .4s var(--spring)}
+@keyframes vwIn{from{opacity:0;scale:.94}}
+#vw .vw-cap{position:absolute;left:50%;bottom:62px;translate:-50% 0;width:min(720px,90vw);text-align:center;color:#e9e7e2;font-size:.88rem;line-height:1.4}
+#vw .vw-tb{position:absolute;left:50%;bottom:max(12px,env(safe-area-inset-bottom));translate:-50% 0;display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:99px;background:rgba(30,28,38,.7);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+#vw .vw-tb button{width:34px;height:34px;border-radius:50%;border:0;background:transparent;color:#fff;font:600 1rem var(--d)}
+#vw .vw-tb button:hover{background:rgba(255,255,255,.16)}
+#vw .vw-c{padding:0 8px;font:500 .78rem var(--m);color:#cfcad8}
+#vw .vw-x{position:absolute;top:max(14px,env(safe-area-inset-top));right:16px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:#111;font-size:1.6rem;line-height:1}
+#vw .vw-n{position:absolute;top:50%;translate:0 -50%;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(30,28,38,.6);color:#fff;font-size:1.6rem;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+#vw .vw-pv{left:16px}
+#vw .vw-nx{right:16px}
+@media(max-width:760px){#vw .vw-n{display:none}}
+
+/* ============ 9 · Móvil y tablet: pantalla de inicio estilo iOS ============ */
+@media(max-width:1024px){
+ #fcs{display:none}
+ #wdg{top:84px;bottom:auto;left:12px;right:12px}
+ .icons{top:200px;left:0;right:0;margin:0 auto;width:min(560px,calc(100% - 24px));grid-template-columns:repeat(4,minmax(0,1fr));row-gap:18px;column-gap:6px;max-height:none}
+ .icons .ic{width:auto;gap:7px;padding:0;font-size:.72rem;text-shadow:0 1px 8px var(--bg),0 0 2px var(--bg)}
+ .icons .ic:hover{background:none}
+ .icons .ic i{width:62px;height:62px;border-radius:19px;border:0;color:#fff;background:linear-gradient(150deg,var(--g1,#ff8a6b),var(--g2,#c8310f));box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -10px 16px rgba(0,0,0,.12),0 12px 20px -10px rgba(0,0,0,.55);transition:transform .2s var(--spring)}
+ .icons .ic:hover i{transform:none}
+ .icons .ic:active i{transform:scale(.9)}
+ .icons .ic svg{width:30px;height:30px}
+ .icons .ic:nth-child(1){--g1:#ff8a6b;--g2:#c8310f}
+ .icons .ic:nth-child(2){--g1:#3ee0c8;--g2:#0a7d70}
+ .icons .ic:nth-child(3){--g1:#a894ff;--g2:#5b3de0}
+ .icons .ic:nth-child(4){--g1:#ffcf5a;--g2:#e8860b}
+ .icons .ic:nth-child(5){--g1:#5ab0ff;--g2:#1f6fe0}
+ .icons .ic:nth-child(6){--g1:#ff8fb8;--g2:#d6336c}
+ .icons .ic:nth-child(7){--g1:#6ee7a0;--g2:#18a058}
+ .icons .ic:nth-child(8){--g1:#9aa3b2;--g2:#4a5160}
+ .icons .ic:nth-child(9){--g1:#ff7a59;--g2:#7a5cff}
+ .dock{display:flex;gap:16px;padding:10px 16px;border-radius:30px}
+ .dock button{width:56px;height:56px;border-radius:17px}
+ .dock button svg{width:26px;height:26px}
+ .fab{bottom:calc(100px + env(safe-area-inset-bottom));right:14px}
+ html:has(.win:not(.min):not(.out)) .dock{opacity:0;pointer-events:none;translate:-50% 30px}
+ html:has(.win:not(.min):not(.out)) .fab{opacity:0;pointer-events:none;translate:0 30px}
+ .tb{position:relative}
+ .tb::before{content:"";position:absolute;top:5px;left:50%;width:38px;height:4px;margin-left:-19px;border-radius:9px;background:var(--ln)}
+ #gyr{flex:none}
+}
+@media(max-width:1024px) and (min-width:700px){.icons{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+/* ============ Animaciones reducidas / apagadas ============ */
+.calm .win,.calm .win.min,.calm .win.snapping{transition:none!important}
+.calm .dock button{transition:none}
+.calm #gl{transition:none}
+.calm .detail .rvl{opacity:1;translate:none;transition:none}

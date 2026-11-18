@@ -27,7 +27,7 @@ const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(ROOT, 'dist');
 const ORIGIN = 'https://angelvilarino.github.io';
 const LANGS = ['es', 'en', 'gl'];
-const JS_FILES = ['content.js', 'js/core.js', 'js/i18n.js', 'js/theme.js', 'js/views.js', 'js/windows.js', 'js/nav.js', 'js/widgets.js', 'js/fx.js', 'js/main.js'];
+const JS_FILES = ['content.js', 'js/core.js', 'js/i18n.js', 'js/theme.js', 'js/views.js', 'js/windows.js', 'js/nav.js', 'js/widgets.js', 'js/fx.js', 'js/main.js', 'js/gl.js', 'js/depth.js'];
 const FONTS = [['space-grotesk', [500, 700]], ['jetbrains-mono', [400, 500]]];
 const PRELOAD_FONTS = ['space-grotesk-latin-500-normal.woff2', 'space-grotesk-latin-700-normal.woff2', 'jetbrains-mono-latin-400-normal.woff2'];
 
@@ -148,7 +148,8 @@ async function build() {
   const jsSrc = `const IMGS=${JSON.stringify(IMGS)};\n;\n` + JS_FILES.map(f => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('\n;\n');
   const jsMin = esbuild.transformSync(jsSrc, { minify: true, target: 'es2019', legalComments: 'none' }).code;
   const APP_JS = `app.${hash(jsMin)}.js`; write(APP_JS, jsMin);
-  const cssMin = esbuild.transformSync(fs.readFileSync(path.join(ROOT, 'css/style.css'), 'utf8'), { loader: 'css', minify: true }).code;
+  const cssSrc = ['css/style.css', 'css/depth.css'].map(f => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('\n');
+  const cssMin = esbuild.transformSync(cssSrc, { loader: 'css', minify: true }).code;
   const STYLE_CSS = `style.${hash(cssMin)}.css`; write(STYLE_CSS, cssMin);
 
   /* ---- service worker ---- */
